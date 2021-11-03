@@ -6,14 +6,16 @@ class PlainDoor extends StatefulWidget {
   final String imgSrc;
   final bool isShadow;
   final Future<void> Function(bool, AnimationController?)? func;
-  const PlainDoor(
-      {Key? key,
-      required this.size,
-      required this.imgSrc,
-      this.func,
-      this.isShadow = false,
-      this.animSec})
-      : super(key: key);
+  final String? day;
+  const PlainDoor({
+    Key? key,
+    required this.size,
+    required this.imgSrc,
+    this.func,
+    this.isShadow = false,
+    this.animSec,
+    this.day,
+  }) : super(key: key);
 
   @override
   _PlainDoorState createState() => _PlainDoorState();
@@ -79,10 +81,10 @@ class _PlainDoorState extends State<PlainDoor>
             image: AssetImage(widget.imgSrc),
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            "24",
-            style: TextStyle(color: Colors.white, fontSize: 4.8),
+            widget.day ?? "",
+            style: const TextStyle(color: Colors.white, fontSize: 4.8),
           ),
         ),
       ),
