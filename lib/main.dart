@@ -29,22 +29,40 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text("Adventskalender"),
       ),
-      body: Container(
-        child: Center(
-          child: Door(
-            animSec: 1,
-            func: (bool check, AnimationController? ct) async {
-              if (ct == null) return;
-              if (ct.isAnimating) return;
-              if (ct.isCompleted) {
-                ct.reverse();
-                return;
-              }
-              ct.forward();
-              return;
-            },
-            size: Size(170, 250),
-            imgSrc: "assets/door.png",
+      body: Center(
+        child: InteractiveViewer(
+          child: Stack(
+            children: [
+              Center(
+                child: Container(
+                  child: Image.asset("assets/wall.png"),
+                ),
+              ),
+              Center(
+                child: Image.asset(
+                  "assets/present.png",
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+              Center(
+                child: Door(
+                  animSec: 1,
+                  func: (bool check, AnimationController? ct) async {
+                    if (ct == null) return;
+                    if (ct.isAnimating) return;
+                    if (ct.isCompleted) {
+                      ct.reverse();
+                      return;
+                    }
+                    ct.forward();
+                    return;
+                  },
+                  size: Size(170, 250),
+                  imgSrc: "assets/door.png",
+                ),
+              ),
+            ],
           ),
         ),
       ),
