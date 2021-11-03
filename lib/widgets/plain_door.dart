@@ -82,7 +82,7 @@ class _PlainDoorState extends State<PlainDoor>
         child: const Center(
           child: Text(
             "24",
-            style: TextStyle(color: Colors.white, fontSize: 48),
+            style: TextStyle(color: Colors.white, fontSize: 4.8),
           ),
         ),
       ),

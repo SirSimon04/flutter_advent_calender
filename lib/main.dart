@@ -11,6 +11,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark(),
       home: MyApp(),
     );
   }
@@ -32,12 +33,11 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Center(
         child: InteractiveViewer(
+          maxScale: 60,
           child: Stack(
             children: [
               Center(
-                child: Container(
-                  child: Image.asset("assets/wall.png"),
-                ),
+                child: Image.asset("assets/bg.jpg"),
               ),
               CalendarDoor(),
             ],

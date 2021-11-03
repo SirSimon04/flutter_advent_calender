@@ -12,15 +12,15 @@ class CalendarDoor extends StatelessWidget {
           const Center(
             child: PlainDoor(
               imgSrc: "assets/door.png",
-              size: Size(170, 250),
+              size: Size(17, 25),
               isShadow: true,
             ),
           ),
           Center(
             child: Image.asset(
               "assets/present.png",
-              width: 80,
-              height: 80,
+              width: 8,
+              height: 8,
             ),
           ),
           Center(
@@ -36,7 +36,7 @@ class CalendarDoor extends StatelessWidget {
                 ct.forward();
                 return;
               },
-              size: Size(170, 250),
+              size: Size(17, 25),
               imgSrc: "assets/door.png",
             ),
           ),
