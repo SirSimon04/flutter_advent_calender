@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advent_calender/widgets/door.dart';
+import 'package:flutter_advent_calender/widgets/calendar_door.dart';
+import 'package:flutter_advent_calender/widgets/plain_door.dart';
 
 void main() => runApp(App());
 
@@ -38,30 +39,7 @@ class _MyAppState extends State<MyApp> {
                   child: Image.asset("assets/wall.png"),
                 ),
               ),
-              Center(
-                child: Image.asset(
-                  "assets/present.png",
-                  width: 80,
-                  height: 80,
-                ),
-              ),
-              Center(
-                child: Door(
-                  animSec: 1,
-                  func: (bool check, AnimationController? ct) async {
-                    if (ct == null) return;
-                    if (ct.isAnimating) return;
-                    if (ct.isCompleted) {
-                      ct.reverse();
-                      return;
-                    }
-                    ct.forward();
-                    return;
-                  },
-                  size: Size(170, 250),
-                  imgSrc: "assets/door.png",
-                ),
-              ),
+              CalendarDoor(),
             ],
           ),
         ),
