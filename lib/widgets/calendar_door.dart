@@ -8,7 +8,7 @@ class CalendarDoor extends StatefulWidget {
   final String imgSrc;
   final String? day;
   final Size doorSize;
-  CalendarDoor({
+  const CalendarDoor({
     required this.imgSrc,
     this.day,
     required this.doorSize,
@@ -62,7 +62,7 @@ class _CalendarDoorState extends State<CalendarDoor> {
               maxParticleSize: 0.15,
               isRandSize: true,
               isRandomColor: true,
-              randColorList: [const Color(0xFFD4AF37), const Color(0xFFF7EF8A)],
+              randColorList: const [Color(0xFFD4AF37), Color(0xFFF7EF8A)],
               awayAnimationCurve: Curves.easeInOutBack,
               enableHover: false,
               hoverColor: Colors.white,
