@@ -39,9 +39,14 @@ class _MyAppState extends State<MyApp> {
               Center(
                 child: Image.asset("assets/bg.jpg"),
               ),
-              CalendarDoor(
-                imgSrc: "assets/door.png",
-                day: "24",
+              Positioned(
+                bottom: 300,
+                right: 300,
+                child: CalendarDoor(
+                  imgSrc: "assets/door.png",
+                  day: "24",
+                  doorSize: const Size(17, 25),
+                ),
               ),
             ],
           ),

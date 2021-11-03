@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+class DoorPressed extends Notification {
+  DoorPressed();
+}
 
 class PlainDoor extends StatefulWidget {
   final int? animSec;
@@ -42,6 +47,12 @@ class _PlainDoorState extends State<PlainDoor>
     super.initState();
   }
 
+  gdClicked() async {
+    DoorPressed().dispatch(context);
+    await Future.delayed(Duration(seconds: 2));
+    DoorPressed().dispatch(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,6 +61,7 @@ class _PlainDoorState extends State<PlainDoor>
           : () {
               bool loadCheck = _anim != null || _anim != null;
               widget.func!(loadCheck, _at);
+              gdClicked();
             },
       child: Container(
         transform: Matrix4(
