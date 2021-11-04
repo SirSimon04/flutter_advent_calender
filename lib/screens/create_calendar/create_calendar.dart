@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/widgets/fill_outlined_button.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class CreateCalendar extends StatefulWidget {
   const CreateCalendar({Key? key}) : super(key: key);
@@ -109,12 +111,42 @@ class _CreateCalendarState extends State<CreateCalendar>
               itemCount: 24,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                return Container(
-                  alignment: Alignment.center,
-                  child: Text((index + 1).toString()),
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      borderRadius: BorderRadius.circular(15)),
+                return GestureDetector(
+                  onTap: () async {
+                    PickedFile? pickedFile = await ImagePicker().getImage(
+                      source: ImageSource.gallery,
+                      maxWidth: 1800,
+                      maxHeight: 1800,
+                    );
+                    if (pickedFile != null) {
+                      setState(() {
+                        images[index] = File(pickedFile.path);
+                      });
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: images[index] != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16.0),
+                              child: Image.file(
+                                images[index] ?? File(""),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            (index + 1).toString(),
+                            style: const TextStyle(
+                              fontSize: 24,
+                            ),
+                          ),
+                    decoration: BoxDecoration(
+                        color: Colors.blueGrey,
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
                 );
               },
             ),
@@ -159,4 +191,31 @@ class _CreateCalendarState extends State<CreateCalendar>
 
   @override
   bool get wantKeepAlive => true;
+
+  List<File?> images = [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ];
 }
