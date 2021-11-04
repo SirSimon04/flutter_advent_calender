@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/widgets/fill_outlined_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class CreateCalendar extends StatefulWidget {
   const CreateCalendar({Key? key}) : super(key: key);
@@ -14,6 +17,41 @@ class _CreateCalendarState extends State<CreateCalendar>
     with AutomaticKeepAliveClientMixin {
   late TextEditingController _titleController;
   late TextEditingController _msgController;
+
+  Future<void> uploadCalendar() async {
+    http.post(
+      Uri.parse('http://fc2c-84-191-198-24.ngrok.io/calendar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': "FLUTTERID",
+        "title": "TITEL",
+        "msg": "MSG",
+        "from": "VON DICH",
+        "to": "FÜR MICH"
+      }),
+    );
+  }
+
+  Future<void> uploadImages() async {
+    print("upload");
+    final request = http.MultipartRequest(
+        "POST", Uri.parse("http://fc2c-84-191-198-24.ngrok.io/upload"));
+
+    final headers = {"Content-type": "multipart/form-data"};
+
+    request.files.add(http.MultipartFile(
+        "image", images[0]!.readAsBytes().asStream(), images[0]!.lengthSync(),
+        filename: images[0]!.path.split("/").last));
+
+    request.headers.addAll(headers);
+
+    final response = await request.send();
+    http.Response res = await http.Response.fromStream(response);
+    final resJson = jsonDecode(res.body);
+    print(resJson["message"]);
+  }
 
   @override
   void initState() {
@@ -177,7 +215,10 @@ class _CreateCalendarState extends State<CreateCalendar>
                 borderRadius: BorderRadius.circular(30.0),
                 color: Theme.of(context).primaryColor,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    // uploadImages();
+                    uploadCalendar();
+                  },
                   minWidth: MediaQuery.of(context).size.width * 0.6,
                   height: MediaQuery.of(context).size.height * 0.07,
                   child: const Text(

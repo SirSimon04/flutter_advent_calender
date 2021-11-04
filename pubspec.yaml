@@ -48,7 +48,7 @@ dev_dependencies:
   particles_flutter: ^0.1.4
   pimp_my_button: ^1.0.0
   image_picker: ^0.8.4+4
-
+  crypto: ^3.0.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

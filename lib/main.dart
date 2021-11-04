@@ -6,6 +6,8 @@ import 'package:flutter_advent_calender/screens/create_calendar/create_calendar.
 import 'package:flutter_advent_calender/screens/own_calendars/own_calendars.dart';
 import 'package:flutter_advent_calender/widgets/calendar_door.dart';
 import 'package:flutter_advent_calender/widgets/plain_door.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 void main() => runApp(App());
 
@@ -39,6 +41,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // print(sha256.convert(utf8.encode(DateTime.now().toString())).toString());
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: const [
