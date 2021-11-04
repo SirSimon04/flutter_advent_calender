@@ -11,17 +11,20 @@ class CreateCalendar extends StatefulWidget {
 class _CreateCalendarState extends State<CreateCalendar>
     with AutomaticKeepAliveClientMixin {
   late TextEditingController _titleController;
+  late TextEditingController _msgController;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController();
+    _msgController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
     _titleController.dispose();
+    _msgController.dispose();
   }
 
   @override
@@ -53,6 +56,46 @@ class _CreateCalendarState extends State<CreateCalendar>
               ),
             ),
             const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: const Divider(
+                thickness: 4,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Weihnachts-Nachricht',
+                ),
+                controller: _msgController,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: const Divider(
+                thickness: 4,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const Center(
+              child: Text(
+                "Bilderauswahl",
+                style: TextStyle(fontSize: 32),
+              ),
+            ),
+            const SizedBox(
               height: 24,
             ),
             GridView.builder(
@@ -64,16 +107,28 @@ class _CreateCalendarState extends State<CreateCalendar>
               ),
               shrinkWrap: true,
               itemCount: 24,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return Container(
                   alignment: Alignment.center,
                   child: Text((index + 1).toString()),
                   decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: Colors.blueGrey,
                       borderRadius: BorderRadius.circular(15)),
                 );
               },
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: const Divider(
+                thickness: 4,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
