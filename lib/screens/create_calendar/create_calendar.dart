@@ -100,6 +100,14 @@ class _CreateCalendarState extends State<CreateCalendar>
             const SizedBox(
               height: 24,
             ),
+            const Text(
+              "Tippe auf einen Tag, um für diesen ein Bild auszuwählen",
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
             GridView.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
