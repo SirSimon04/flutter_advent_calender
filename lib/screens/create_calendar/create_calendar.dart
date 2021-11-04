@@ -5,6 +5,7 @@ import 'package:flutter_advent_calender/widgets/fill_outlined_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 
 class CreateCalendar extends StatefulWidget {
   const CreateCalendar({Key? key}) : super(key: key);
@@ -18,16 +19,21 @@ class _CreateCalendarState extends State<CreateCalendar>
   late TextEditingController _titleController;
   late TextEditingController _msgController;
 
+  late String newCalId;
+
   Future<void> uploadCalendar() async {
+    newCalId =
+        sha256.convert(utf8.encode(DateTime.now().toString())).toString();
+
     http.post(
       Uri.parse('http://fc2c-84-191-198-24.ngrok.io/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'id': "FLUTTERID",
-        "title": "TITEL",
-        "msg": "MSG",
+        'id': newCalId,
+        "title": _titleController.text.trim(),
+        "msg": _msgController.text.trim(),
         "from": "VON DICH",
         "to": "FÜR MICH"
       }),
@@ -35,22 +41,23 @@ class _CreateCalendarState extends State<CreateCalendar>
   }
 
   Future<void> uploadImages() async {
-    print("upload");
     final request = http.MultipartRequest(
-        "POST", Uri.parse("http://fc2c-84-191-198-24.ngrok.io/upload"));
+        "POST", Uri.parse("http://fc2c-84-191-198-24.ngrok.io/image"));
 
     final headers = {"Content-type": "multipart/form-data"};
 
-    request.files.add(http.MultipartFile(
-        "image", images[0]!.readAsBytes().asStream(), images[0]!.lengthSync(),
-        filename: images[0]!.path.split("/").last));
+    for (int i = 0; i < 24; i++) {
+      request.files.add(http.MultipartFile(i.toString(),
+          images[0]!.readAsBytes().asStream(), images[0]!.lengthSync(),
+          filename: (newCalId +
+              "_" +
+              i.toString() +
+              images[0]!.path.split(".").last)));
+    }
 
     request.headers.addAll(headers);
 
     final response = await request.send();
-    http.Response res = await http.Response.fromStream(response);
-    final resJson = jsonDecode(res.body);
-    print(resJson["message"]);
   }
 
   @override
@@ -216,8 +223,8 @@ class _CreateCalendarState extends State<CreateCalendar>
                 color: Theme.of(context).primaryColor,
                 child: MaterialButton(
                   onPressed: () async {
-                    // uploadImages();
                     uploadCalendar();
+                    uploadImages();
                   },
                   minWidth: MediaQuery.of(context).size.width * 0.6,
                   height: MediaQuery.of(context).size.height * 0.07,
