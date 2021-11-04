@@ -42,10 +42,14 @@ class _MyAppState extends State<MyApp> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_day),
+            icon: Icon(
+              Icons.calendar_view_month_outlined,
+            ),
+            label: "Meine Kalender",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_box_rounded),
+            label: "Kalender erstellen",
           ),
         ],
         onTap: _onItemTapped,
