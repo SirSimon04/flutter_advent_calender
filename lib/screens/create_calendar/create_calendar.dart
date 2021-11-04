@@ -48,11 +48,12 @@ class _CreateCalendarState extends State<CreateCalendar>
 
     for (int i = 0; i < 24; i++) {
       request.files.add(http.MultipartFile(i.toString(),
-          images[0]!.readAsBytes().asStream(), images[0]!.lengthSync(),
+          images[i]!.readAsBytes().asStream(), images[i]!.lengthSync(),
           filename: (newCalId +
               "_" +
               i.toString() +
-              images[0]!.path.split(".").last)));
+              "." +
+              images[i]!.path.split(".").last)));
     }
 
     request.headers.addAll(headers);
