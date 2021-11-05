@@ -29,8 +29,8 @@ class HttpHelper {
     String newCalId =
         sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
-    await http.post(
-      Uri.parse('http://fc2c-84-191-198-24.ngrok.io/calendar'),
+    var res = await http.post(
+      Uri.parse('$ngrokUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -42,6 +42,8 @@ class HttpHelper {
         "to": "FÜR MICH"
       }),
     );
+
+    print(res.statusCode);
 
     return newCalId;
   }
