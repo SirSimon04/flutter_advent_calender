@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
-import 'package:flutter_advent_calender/services/database_handler.dart';
+import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class OwnCalendars extends StatefulWidget {
   const OwnCalendars({Key? key}) : super(key: key);
@@ -51,16 +49,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
     );
   }
 
-  Future<CalendarModel> getCalendarFromServer(String id) async {
-    final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
-
-    if (response.statusCode == 200) {
-      return CalendarModel.fromMap(jsonDecode(response.body));
-    } else {
-      throw Exception("Failed to load Calendar");
-    }
-  }
-
   // dbTest() async {
   // print("db test");
   // DatabaseHandler db = DatabaseHandler();
@@ -75,8 +63,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
   @override
   void initState() {
     super.initState();
-    getCalendarFromServer(
-        "04d1122e2a852a8ecba209663841cc7526c005ab4b1323575668a960a5d33f0d");
   }
 
   @override
