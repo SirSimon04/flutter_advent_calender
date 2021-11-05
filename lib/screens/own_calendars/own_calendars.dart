@@ -11,6 +11,8 @@ class OwnCalendars extends StatefulWidget {
 
 class _OwnCalendarsState extends State<OwnCalendars>
     with AutomaticKeepAliveClientMixin {
+  String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
+  final TextEditingController _textFieldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -20,6 +22,44 @@ class _OwnCalendarsState extends State<OwnCalendars>
           "Meine Kalender",
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_box_rounded),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Kalender hinzufügen'),
+                    content: TextField(
+                      onChanged: (value) {},
+                      controller: _textFieldController,
+                      decoration:
+                          const InputDecoration(hintText: "Kalender-Code"),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          "Hinzufügen",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

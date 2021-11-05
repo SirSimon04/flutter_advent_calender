@@ -21,6 +21,8 @@ class _CreateCalendarState extends State<CreateCalendar>
 
   late String newCalId;
 
+  String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
+
   Future<void> uploadCalendar() async {
     newCalId =
         sha256.convert(utf8.encode(DateTime.now().toString())).toString();
@@ -41,8 +43,7 @@ class _CreateCalendarState extends State<CreateCalendar>
   }
 
   Future<void> uploadImages() async {
-    final request = http.MultipartRequest(
-        "POST", Uri.parse("http://fc2c-84-191-198-24.ngrok.io/image"));
+    final request = http.MultipartRequest("POST", Uri.parse("$ngrokUrl/image"));
 
     final headers = {"Content-type": "multipart/form-data"};
 
