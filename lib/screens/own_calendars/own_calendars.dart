@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
+import 'package:flutter_advent_calender/services/database_handler.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class OwnCalendars extends StatefulWidget {
   const OwnCalendars({Key? key}) : super(key: key);
@@ -13,6 +17,55 @@ class _OwnCalendarsState extends State<OwnCalendars>
     with AutomaticKeepAliveClientMixin {
   String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
   final TextEditingController _textFieldController = TextEditingController();
+
+  showAddAlert(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Kalender hinzufügen'),
+          content: TextField(
+            onChanged: (value) {},
+            controller: _textFieldController,
+            decoration: const InputDecoration(hintText: "Kalender-Code"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "Hinzufügen",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  dbTest() async {
+    // print("db test");
+    DatabaseHandler db = DatabaseHandler();
+    // await db.initializeDB();
+    // print("initialized");
+    // await db.insertCalendar(
+    //     CalendarModel(title: "TESTTITEL", id: "TESTID2", msg: "TESTMSG"));
+    // print("inserted");
+    // print(await db.getCalendars());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -26,37 +79,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
           IconButton(
             icon: const Icon(Icons.add_box_rounded),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Kalender hinzufügen'),
-                    content: TextField(
-                      onChanged: (value) {},
-                      controller: _textFieldController,
-                      decoration:
-                          const InputDecoration(hintText: "Kalender-Code"),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          "Hinzufügen",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.blue),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
+              showAddAlert(context);
             },
           )
         ],

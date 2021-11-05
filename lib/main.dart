@@ -1,15 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/screens/create_calendar/create_calendar.dart';
 import 'package:flutter_advent_calender/screens/own_calendars/own_calendars.dart';
-import 'package:flutter_advent_calender/widgets/calendar_door.dart';
-import 'package:flutter_advent_calender/widgets/plain_door.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() => runApp(App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const App());
+}
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);

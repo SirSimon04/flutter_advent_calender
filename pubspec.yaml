@@ -49,6 +49,8 @@ dev_dependencies:
   pimp_my_button: ^1.0.0
   image_picker: ^0.8.4+4
   crypto: ^3.0.1
+  sqflite: ^2.0.0+4
+  path: ^1.8.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
