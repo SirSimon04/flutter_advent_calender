@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
+import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -30,8 +31,18 @@ class _OwnCalendarsState extends State<OwnCalendars>
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+                //DO ALLE THE STUFF HERE
+                try {
+                  CalendarModel c = await HttpHelper()
+                      .getCalendarFromServer(_textFieldController.text.trim());
+                  await DatabaseHandler().insertCalendar(c);
+                  print(await DatabaseHandler().getCalendars());
+                  //TODO: Rebuild the grid view
+                } catch (e) {
+                  print(e);
+                }
               },
               child: const Text(
                 "Hinzufügen",

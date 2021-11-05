@@ -12,6 +12,8 @@ class HttpHelper {
 
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
+    } else if (response.statusCode == 404) {
+      throw "not-found";
     } else {
       throw Exception("Failed to load Calendar");
     }
