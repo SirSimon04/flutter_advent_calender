@@ -213,8 +213,6 @@ class _CreateCalendarState extends State<CreateCalendar>
                           images = newImages;
                           _isLoading = false;
                         });
-                        newCalId =
-                            "16c09eddd4ea7f9c0732ac501712e5ff09b98740fb18a45d6f901867074c89ab";
                         _scrollController.jumpTo(0);
                         showDialog(
                           builder: (context) => AlertDialog(
