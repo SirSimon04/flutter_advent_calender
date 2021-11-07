@@ -20,8 +20,6 @@ class _CreateCalendarState extends State<CreateCalendar>
   late ScrollController _scrollController;
   late String newCalId;
 
-  String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
-
   bool _isLoading = false;
 
   @override

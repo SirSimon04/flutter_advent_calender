@@ -7,8 +7,8 @@ import 'package:crypto/crypto.dart';
 
 class HttpHelper {
   HttpHelper();
-
-  final String ngrokUrl = "http://c13e-84-152-151-46.ngrok.io";
+  static String ngrokUrlStatic = "https://8d26-91-49-177-26.ngrok.io";
+  final String ngrokUrl = "https://8d26-91-49-177-26.ngrok.io";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
     final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
@@ -55,14 +55,19 @@ class HttpHelper {
 
     final headers = {"Content-type": "multipart/form-data"};
 
-    for (int i = 0; i < 24; i++) {
-      request.files.add(http.MultipartFile(i.toString(),
-          images[i]!.readAsBytes().asStream(), images[i]!.lengthSync(),
+    for (int i = 0; i < 1; i++) {
+      request.files.add(
+        http.MultipartFile(
+          i.toString(),
+          images[i]!.readAsBytes().asStream(),
+          images[i]!.lengthSync(),
           filename: (newCalId +
               "_" +
               i.toString() +
               "." +
-              images[i]!.path.split(".").last)));
+              images[i]!.path.split(".").last),
+        ),
+      );
     }
 
     request.headers.addAll(headers);

@@ -48,11 +48,13 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   CalendarModel c = await HttpHelper()
                       .getCalendarFromServer(_textFieldController.text.trim());
                   await DatabaseHandler().insertCalendar(c);
-                  print(await DatabaseHandler().getCalendars());
 
                   setState(() {
                     _futureCalList = getCalList();
                   });
+
+                  //TODO: Load all images from server and save locally
+
                 } catch (e) {
                   print(e);
                 }
@@ -93,7 +95,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
-    DatabaseHandler().initializeDB();
   }
 
   @override
