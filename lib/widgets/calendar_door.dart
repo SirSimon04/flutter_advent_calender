@@ -16,6 +16,7 @@ class CalendarDoor extends StatefulWidget {
   final bool isLast;
   final int iterator;
   final CalendarModel calendar;
+  final bool isDoorOpen;
   const CalendarDoor({
     required this.imgSrc,
     this.day,
@@ -23,6 +24,7 @@ class CalendarDoor extends StatefulWidget {
     this.isLast = false,
     required this.iterator,
     required this.calendar,
+    required this.isDoorOpen,
   });
 
   @override
@@ -107,16 +109,17 @@ class _CalendarDoorState extends State<CalendarDoor> {
             func: (bool check, AnimationController? ct) async {
               if (ct == null) return;
               if (ct.isAnimating) return;
-              if (ct.isCompleted) {
-                ct.reverse();
-                return;
-              }
+              // if (ct.isCompleted) {
+              //   ct.reverse();
+              //   return;
+              // }
               ct.forward();
               return;
             },
             size: widget.doorSize,
             imgSrc: widget.imgSrc,
             day: widget.day,
+            isOpen: widget.isDoorOpen,
           ),
         ],
       ),

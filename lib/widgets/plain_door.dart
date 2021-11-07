@@ -12,6 +12,7 @@ class PlainDoor extends StatefulWidget {
   final bool isShadow;
   final Future<void> Function(bool, AnimationController?)? func;
   final String? day;
+  final bool isOpen;
   const PlainDoor({
     Key? key,
     required this.size,
@@ -20,6 +21,7 @@ class PlainDoor extends StatefulWidget {
     this.isShadow = false,
     this.animSec,
     this.day,
+    this.isOpen = false,
   }) : super(key: key);
 
   @override
@@ -63,43 +65,81 @@ class _PlainDoorState extends State<PlainDoor>
               widget.func!(loadCheck, _at);
               gdClicked();
             },
-      child: Container(
-        transform: Matrix4(
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-        )..rotateY(_anim?.value ?? 0),
-        width: widget.size.width,
-        height: widget.size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: widget.isShadow
-                ? ColorFilter.mode(Colors.black, BlendMode.srcIn)
-                : null,
-            image: AssetImage(widget.imgSrc),
-          ),
-        ),
-        child: Center(
-          child: Text(
-            widget.day ?? "",
-            style: const TextStyle(color: Colors.white, fontSize: 4.8),
-          ),
-        ),
-      ),
+      child: widget.isOpen
+          ? Container(
+              transform: Matrix4(
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+              )..rotateY(1.5),
+              width: widget.size.width,
+              height: widget.size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  colorFilter: widget.isShadow
+                      ? ColorFilter.mode(Colors.black, BlendMode.srcIn)
+                      : null,
+                  image: AssetImage(widget.imgSrc),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  widget.day ?? "",
+                  style: const TextStyle(color: Colors.white, fontSize: 4.8),
+                ),
+              ),
+            )
+          : Container(
+              transform: Matrix4(
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+              )..rotateY(_anim?.value ?? 0),
+              width: widget.size.width,
+              height: widget.size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  colorFilter: widget.isShadow
+                      ? ColorFilter.mode(Colors.black, BlendMode.srcIn)
+                      : null,
+                  image: AssetImage(widget.imgSrc),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  widget.day ?? "",
+                  style: const TextStyle(color: Colors.white, fontSize: 4.8),
+                ),
+              ),
+            ),
     );
   }
 }
