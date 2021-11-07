@@ -25,6 +25,10 @@ class _OwnCalendarsState extends State<OwnCalendars>
 
   late Future<List<CalendarModel>> _futureCalList;
 
+  HttpHelper httpHelper = HttpHelper();
+  DatabaseHandler databaseHandler = DatabaseHandler();
+  FileService fileService = FileService();
+
   showAddAlert(context) {
     showDialog(
       context: context,
@@ -43,19 +47,27 @@ class _OwnCalendarsState extends State<OwnCalendars>
                 setState(() {
                   _isLoading = true;
                 });
-                //DO ALLE THE STUFF HERE
                 try {
-                  CalendarModel c = await HttpHelper()
+                  await databaseHandler.deleteDB();
+                  //Get calendar by id from Server and save to local db
+                  CalendarModel c = await httpHelper
                       .getCalendarFromServer(_textFieldController.text.trim());
-                  await DatabaseHandler().insertCalendar(c);
+                  await databaseHandler.insertCalendar(c);
 
+                  //Update showing calendars
                   setState(() {
                     _futureCalList = getCalList();
                   });
 
+                  //Saving every image on local storage
                   for (int i = 0; i < 24; i++) {
-                    await FileService()
+                    await fileService
                         .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+                  }
+
+                  //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
+                  for (int i = 0; i < 24; i++) {
+                    await databaseHandler.insertOpened(id: c.id, day: i);
                   }
                 } catch (e) {
                   print(e);
@@ -97,6 +109,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
+    DatabaseHandler().initializeDB();
   }
 
   @override
