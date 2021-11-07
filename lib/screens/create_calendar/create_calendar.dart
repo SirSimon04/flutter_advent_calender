@@ -191,34 +191,36 @@ class _CreateCalendarState extends State<CreateCalendar>
                     color: Theme.of(context).primaryColor,
                     child: MaterialButton(
                       onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        HttpHelper http = HttpHelper();
-                        newCalId = await http.uploadCalendar(
-                          msg: _msgController.text.trim(),
-                          title: _titleController.text.trim(),
-                        );
-                        await http.uploadImages(
-                          images: images,
-                          newCalId: newCalId,
-                        );
-                        _msgController.clear();
-                        _titleController.clear();
-                        List<File?> newImages = [];
-                        for (int i = 0; i < 24; i++) {
-                          newImages.add(null);
-                        }
-                        setState(() {
-                          images = newImages;
-                          _isLoading = false;
-                        });
-                        _scrollController.jumpTo(0);
+                        // setState(() {
+                        //   _isLoading = true;
+                        // });
+                        // HttpHelper http = HttpHelper();
+                        // newCalId = await http.uploadCalendar(
+                        //   msg: _msgController.text.trim(),
+                        //   title: _titleController.text.trim(),
+                        // );
+                        // await http.uploadImages(
+                        //   images: images,
+                        //   newCalId: newCalId,
+                        // );
+                        // _msgController.clear();
+                        // _titleController.clear();
+                        // List<File?> newImages = [];
+                        // for (int i = 0; i < 24; i++) {
+                        //   newImages.add(null);
+                        // }
+                        // setState(() {
+                        //   images = newImages;
+                        //   _isLoading = false;
+                        // });
+                        // _scrollController.jumpTo(0);
+                        newCalId = "";
                         showDialog(
                           builder: (context) => AlertDialog(
                             title: const Text(
                                 "Dein Kalender wurde erfolgreich erstellt"),
                             content: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Text(
                                   "Schicke diese Id an deine Freunde",
