@@ -9,6 +9,7 @@ class FileService {
     final response = await http
         .get(Uri.parse("https://8d26-91-49-177-26.ngrok.io/image/test.jpg"));
     Directory documentDirectory = await getApplicationDocumentsDirectory();
+    print(join(documentDirectory.path, 'imagetest.png'));
     File file = File(join(documentDirectory.path, 'imagetest.png'));
     await file.writeAsBytes(response.bodyBytes);
     print("Saved file");

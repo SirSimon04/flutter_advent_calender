@@ -31,4 +31,11 @@ class DatabaseHandler {
     final List<Map<String, Object?>> queryResult = await db.query('calendars');
     return queryResult.map((e) => CalendarModel.fromMap(e)).toList();
   }
+
+  Future<void> deleteDB() async {
+    final Database db = await initializeDB();
+    print("DELETING");
+    db.delete("calendars");
+    print("deleted");
+  }
 }

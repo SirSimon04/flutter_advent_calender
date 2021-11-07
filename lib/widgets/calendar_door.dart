@@ -1,5 +1,6 @@
-import 'dart:math';
+import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/widgets/plain_door.dart';
 import 'package:particles_flutter/particles_flutter.dart';
@@ -46,11 +47,22 @@ class _CalendarDoorState extends State<CalendarDoor> {
           Positioned(
             bottom: 10,
             right: 4,
-            child: Image.asset(
-              "assets/present.png",
-              width: 8,
-              height: 8,
-            ),
+            child: FutureBuilder<Directory>(
+                future: getApplicationDocumentsDirectory(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    try {
+                      return Image.file(
+                        File("${snapshot.data!.path}/imagetest.png"),
+                        width: widget.doorSize.width,
+                      );
+                    } catch (e) {
+                      return const Text("Fehler");
+                    }
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
           ),
           widget.isLast
               ? Visibility(
@@ -83,33 +95,6 @@ class _CalendarDoorState extends State<CalendarDoor> {
                   ),
                 )
               : Container(),
-          // PimpedButton(
-          //     particle: Firework(),
-          //     pimpedWidgetBuilder: (context, controller) {
-          //       return NotificationListener<DoorPressed>(
-          //         onNotification: (val) {
-          //           print("door pressed here");
-          //           controller.forward(from: 0.0);
-          //           return true;
-          //         },
-          //         child: PlainDoor(
-          //           animSec: 1,
-          //           func: (bool check, AnimationController? ct) async {
-          //             if (ct == null) return;
-          //             if (ct.isAnimating) return;
-          //             if (ct.isCompleted) {
-          //               ct.reverse();
-          //               return;
-          //             }
-          //             ct.forward();
-          //             return;
-          //           },
-          //           size: widget.doorSize,
-          //           imgSrc: widget.imgSrc,
-          //           day: widget.day,
-          //         ),
-          //       );
-          //     }),
           PlainDoor(
             animSec: 1,
             func: (bool check, AnimationController? ct) async {

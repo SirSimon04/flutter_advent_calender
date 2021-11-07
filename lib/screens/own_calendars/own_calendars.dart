@@ -93,8 +93,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
-    print("before saving");
-    FileService().saveImage();
+    DatabaseHandler().initializeDB();
   }
 
   @override
@@ -137,7 +136,10 @@ class _OwnCalendarsState extends State<OwnCalendars>
                     );
                   } else {
                     return const Center(
-                      child: Text("Es ist ein Fehler aufgetreten"),
+                      child: Text(
+                        "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                        textAlign: TextAlign.center,
+                      ),
                     );
                   }
                 }),
