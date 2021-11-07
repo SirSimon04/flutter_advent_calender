@@ -4,9 +4,8 @@ import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
+import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class OwnCalendars extends StatefulWidget {
   const OwnCalendars({Key? key}) : super(key: key);
@@ -19,8 +18,11 @@ class _OwnCalendarsState extends State<OwnCalendars>
     with AutomaticKeepAliveClientMixin {
   String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
   final TextEditingController _textFieldController = TextEditingController();
+  final DatabaseHandler db = DatabaseHandler();
 
   bool _isLoading = false;
+
+  late Future<List<CalendarModel>> _futureCalList;
 
   showAddAlert(context) {
     showDialog(
@@ -47,7 +49,9 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   await DatabaseHandler().insertCalendar(c);
                   print(await DatabaseHandler().getCalendars());
 
-                  //TODO: Rebuild the grid view
+                  setState(() {
+                    _futureCalList = getCalList();
+                  });
                 } catch (e) {
                   print(e);
                 }
@@ -82,9 +86,12 @@ class _OwnCalendarsState extends State<OwnCalendars>
   //   print(await db.getCalendars());
   // }
 
+  Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
+
   @override
   void initState() {
     super.initState();
+    _futureCalList = getCalList();
   }
 
   @override
@@ -109,169 +116,28 @@ class _OwnCalendarsState extends State<OwnCalendars>
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
-            child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12.0,
-              mainAxisSpacing: 12.0,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => const CalendarView()));
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Christina",
-                              style: TextStyle(fontSize: 32),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Du kannst ein neues Türchen öffnen",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
+            child: FutureBuilder<List<CalendarModel>>(
+                future: _futureCalList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return GridView.builder(
+                      itemCount: snapshot.data?.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
                       ),
-                      Positioned(
-                        top: 15,
-                        right: 30,
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Image.asset(
-                            "assets/present.png",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => const CalendarView()));
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Christina",
-                              style: TextStyle(fontSize: 32),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Du hast bisher alle Türchen geöffnet",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 15,
-                        right: 30,
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Image.asset(
-                            "assets/present.png",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => const CalendarView()));
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Christina",
-                              style: TextStyle(fontSize: 32),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Du kannst zwei neue Türchen öffnen",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 15,
-                        right: 30,
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Image.asset(
-                            "assets/present.png",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                      itemBuilder: (context, index) {
+                        return CalendarTile(calendar: snapshot.data?[index]);
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("Es ist ein Fehler aufgetreten"),
+                    );
+                  }
+                }),
           ),
           Container(
             child: _isLoading

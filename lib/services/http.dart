@@ -8,7 +8,7 @@ import 'package:crypto/crypto.dart';
 class HttpHelper {
   HttpHelper();
 
-  final String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
+  final String ngrokUrl = "http://c13e-84-152-151-46.ngrok.io";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
     final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
@@ -18,6 +18,7 @@ class HttpHelper {
     } else if (response.statusCode == 404) {
       throw "not-found";
     } else {
+      print(response.statusCode);
       throw Exception("Failed to load Calendar");
     }
   }
