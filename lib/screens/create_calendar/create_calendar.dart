@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
 import 'package:image_picker/image_picker.dart';
@@ -191,30 +192,29 @@ class _CreateCalendarState extends State<CreateCalendar>
                     color: Theme.of(context).primaryColor,
                     child: MaterialButton(
                       onPressed: () async {
-                        // setState(() {
-                        //   _isLoading = true;
-                        // });
-                        // HttpHelper http = HttpHelper();
-                        // newCalId = await http.uploadCalendar(
-                        //   msg: _msgController.text.trim(),
-                        //   title: _titleController.text.trim(),
-                        // );
-                        // await http.uploadImages(
-                        //   images: images,
-                        //   newCalId: newCalId,
-                        // );
-                        // _msgController.clear();
-                        // _titleController.clear();
-                        // List<File?> newImages = [];
-                        // for (int i = 0; i < 24; i++) {
-                        //   newImages.add(null);
-                        // }
-                        // setState(() {
-                        //   images = newImages;
-                        //   _isLoading = false;
-                        // });
-                        // _scrollController.jumpTo(0);
-                        newCalId = "";
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        HttpHelper http = HttpHelper();
+                        newCalId = await http.uploadCalendar(
+                          msg: _msgController.text.trim(),
+                          title: _titleController.text.trim(),
+                        );
+                        await http.uploadImages(
+                          images: images,
+                          newCalId: newCalId,
+                        );
+                        _msgController.clear();
+                        _titleController.clear();
+                        List<File?> newImages = [];
+                        for (int i = 0; i < 24; i++) {
+                          newImages.add(null);
+                        }
+                        setState(() {
+                          images = newImages;
+                          _isLoading = false;
+                        });
+                        _scrollController.jumpTo(0);
                         showDialog(
                           builder: (context) => AlertDialog(
                             title: const Text(

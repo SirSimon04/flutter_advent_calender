@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
+import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
@@ -92,6 +93,8 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
+    print("before saving");
+    FileService().saveImage();
   }
 
   @override
