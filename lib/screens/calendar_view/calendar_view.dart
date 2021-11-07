@@ -1,10 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/widgets/calendar_door.dart';
 
 class CalendarView extends StatefulWidget {
-  const CalendarView({Key? key}) : super(key: key);
+  final CalendarModel calendar;
+  const CalendarView({
+    Key? key,
+    required this.calendar,
+  }) : super(key: key);
 
   @override
   _CalendarViewState createState() => _CalendarViewState();
@@ -68,9 +73,6 @@ class _CalendarViewState extends State<CalendarView> {
   Random random = Random();
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < 24; i++) {
-      print(bottom[i].toString());
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Adventskalender"),
@@ -88,10 +90,12 @@ class _CalendarViewState extends State<CalendarView> {
                   bottom: bottom[i].toDouble(),
                   right: right[i].toDouble(),
                   child: CalendarDoor(
+                    iterator: i,
                     imgSrc: "assets/door.png",
                     day: "${i + 1}",
-                    doorSize: Size(17, 25),
+                    doorSize: const Size(17, 25),
                     isLast: i == 23,
+                    calendar: widget.calendar,
                   ),
                 ),
             ],

@@ -53,7 +53,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
                     _futureCalList = getCalList();
                   });
 
-
                   for (int i = 0; i < 24; i++) {
                     await FileService()
                         .saveImageFromName(c.id + "_" + i.toString() + ".jpg");

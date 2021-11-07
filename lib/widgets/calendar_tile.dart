@@ -11,8 +11,10 @@ class CalendarTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-            CupertinoPageRoute(builder: (context) => const CalendarView()));
+        Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => CalendarView(
+                  calendar: calendar!,
+                )));
       },
       child: Stack(
         children: [
