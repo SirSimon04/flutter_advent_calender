@@ -38,6 +38,21 @@ class DatabaseHandler {
     });
   }
 
+  Future<void> updateOpened({required String id, required int day}) async {
+    final db = await initializeDB();
+
+    await db.update(
+      "opendays",
+      {
+        "id": id,
+        "day": day,
+        "open": 1,
+      },
+      where: "id = ? and day = ?",
+      whereArgs: [id, day],
+    );
+  }
+
   Future<List<Map<String, Object?>>> getOpened(String id) async {
     final db = await initializeDB();
     final List<Map<String, Object?>> queryResult =

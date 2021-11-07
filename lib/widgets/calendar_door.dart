@@ -50,6 +50,7 @@ class _CalendarDoorState extends State<CalendarDoor> {
             imgSrc: widget.imgSrc,
             size: widget.doorSize,
             isShadow: true,
+            iterator: 0,
           ),
           Positioned(
             bottom: 10,
@@ -120,6 +121,8 @@ class _CalendarDoorState extends State<CalendarDoor> {
             imgSrc: widget.imgSrc,
             day: widget.day,
             isOpen: widget.isDoorOpen,
+            calendar: widget.calendar,
+            iterator: widget.iterator,
           ),
         ],
       ),

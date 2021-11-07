@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'dart:io';
+
+import 'package:flutter_advent_calender/services/local_database_handler.dart';
 
 class DoorPressed extends Notification {
   DoorPressed();
@@ -13,6 +16,8 @@ class PlainDoor extends StatefulWidget {
   final Future<void> Function(bool, AnimationController?)? func;
   final String? day;
   final bool isOpen;
+  final CalendarModel? calendar;
+  final int iterator;
   const PlainDoor({
     Key? key,
     required this.size,
@@ -22,6 +27,8 @@ class PlainDoor extends StatefulWidget {
     this.animSec,
     this.day,
     this.isOpen = false,
+    this.calendar,
+    required this.iterator,
   }) : super(key: key);
 
   @override
@@ -55,6 +62,11 @@ class _PlainDoorState extends State<PlainDoor>
     DoorPressed().dispatch(context);
   }
 
+  updateDBEntry() async {
+    DatabaseHandler db = DatabaseHandler();
+    db.updateOpened(id: widget.calendar?.id ?? "", day: widget.iterator);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -64,6 +76,7 @@ class _PlainDoorState extends State<PlainDoor>
               bool loadCheck = _anim != null || _anim != null;
               widget.func!(loadCheck, _at);
               gdClicked();
+              updateDBEntry();
             },
       child: widget.isOpen
           ? Container(
