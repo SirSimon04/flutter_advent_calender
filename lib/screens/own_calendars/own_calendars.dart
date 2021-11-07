@@ -53,8 +53,11 @@ class _OwnCalendarsState extends State<OwnCalendars>
                     _futureCalList = getCalList();
                   });
 
-                  //TODO: Load all images from server and save locally
 
+                  for (int i = 0; i < 24; i++) {
+                    await FileService()
+                        .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+                  }
                 } catch (e) {
                   print(e);
                 }

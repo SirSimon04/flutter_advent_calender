@@ -16,6 +16,6 @@ class FileService {
 
     await file.writeAsBytes(response.bodyBytes);
 
-    print("Saved file");
+    print("Saved file at " + join(documentDirectory.path, name));
   }
 }

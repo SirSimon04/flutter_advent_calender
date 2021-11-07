@@ -27,8 +27,8 @@ class HttpHelper {
     required String title,
     required String msg,
   }) async {
-    String newCalId =
-        sha256.convert(utf8.encode(DateTime.now().toString())).toString();
+    String newCalId = "123";
+    // sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
     var res = await http.post(
       Uri.parse('$ngrokUrl/calendar'),
@@ -55,7 +55,7 @@ class HttpHelper {
 
     final headers = {"Content-type": "multipart/form-data"};
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 24; i++) {
       request.files.add(
         http.MultipartFile(
           i.toString(),
