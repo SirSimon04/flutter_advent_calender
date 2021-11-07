@@ -5,7 +5,12 @@ class FillOutlineButton extends StatelessWidget {
   final VoidCallback onPress;
   final String text;
 
-  FillOutlineButton(this.isFilled, this.text, this.onPress);
+  const FillOutlineButton(
+    this.isFilled,
+    this.text,
+    this.onPress, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class FillOutlineButton extends StatelessWidget {
       onPressed: onPress,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
-          side: BorderSide(color: Colors.white)),
+          side: const BorderSide(color: Colors.white)),
       color: isFilled ? Colors.white : Colors.transparent,
       child: Text(
         text,

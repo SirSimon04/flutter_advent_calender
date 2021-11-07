@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 class HttpHelper {
   HttpHelper();
@@ -18,7 +16,6 @@ class HttpHelper {
     } else if (response.statusCode == 404) {
       throw "not-found";
     } else {
-      print(response.statusCode);
       throw Exception("Failed to load Calendar");
     }
   }
@@ -30,7 +27,7 @@ class HttpHelper {
     String newCalId = "123";
     // sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
-    var res = await http.post(
+    await http.post(
       Uri.parse('$ngrokUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -43,8 +40,6 @@ class HttpHelper {
         "to": "FÜR MICH"
       }),
     );
-
-    print(res.statusCode);
 
     return newCalId;
   }
@@ -69,6 +64,6 @@ class HttpHelper {
 
     request.headers.addAll(headers);
 
-    final response = await request.send();
+    await request.send();
   }
 }

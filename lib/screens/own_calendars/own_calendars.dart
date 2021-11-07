@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
-import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
 import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
@@ -24,7 +23,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
   bool _isLoading = false;
 
   late Future<List<CalendarModel>> _futureCalList;
-  late Future<int> _futureOpenCount;
 
   HttpHelper httpHelper = HttpHelper();
   DatabaseHandler databaseHandler = DatabaseHandler();
@@ -48,29 +46,25 @@ class _OwnCalendarsState extends State<OwnCalendars>
                 setState(() {
                   _isLoading = true;
                 });
-                try {
-                  //Get calendar by id from Server and save to local db
-                  CalendarModel c = await httpHelper
-                      .getCalendarFromServer(_textFieldController.text.trim());
-                  await databaseHandler.insertCalendar(c);
+                //Get calendar by id from Server and save to local db
+                CalendarModel c = await httpHelper
+                    .getCalendarFromServer(_textFieldController.text.trim());
+                await databaseHandler.insertCalendar(c);
 
-                  //Update showing calendars
-                  setState(() {
-                    _futureCalList = getCalList();
-                  });
+                //Update showing calendars
+                setState(() {
+                  _futureCalList = getCalList();
+                });
 
-                  //Saving every image on local storage
-                  for (int i = 0; i < 24; i++) {
-                    await fileService
-                        .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
-                  }
+                //Saving every image on local storage
+                for (int i = 0; i < 24; i++) {
+                  await fileService
+                      .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+                }
 
-                  //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
-                  for (int i = 0; i < 24; i++) {
-                    await databaseHandler.insertOpened(id: c.id, day: i);
-                  }
-                } catch (e) {
-                  print(e);
+                //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
+                for (int i = 0; i < 24; i++) {
+                  await databaseHandler.insertOpened(id: c.id, day: i);
                 }
                 setState(() {
                   _isLoading = false;
@@ -183,7 +177,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
             ),
             Container(
               child: _isLoading
-                  ? Loader(
+                  ? const Loader(
                       loadingTxt: "Kalender wird geladen...",
                     )
                   : Container(),

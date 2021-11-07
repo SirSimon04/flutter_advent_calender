@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
-import 'dart:io';
-
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 
 class DoorPressed extends Notification {
@@ -58,7 +56,7 @@ class _PlainDoorState extends State<PlainDoor>
 
   gdClicked() async {
     DoorPressed().dispatch(context);
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     DoorPressed().dispatch(context);
   }
 
@@ -110,7 +108,7 @@ class _PlainDoorState extends State<PlainDoor>
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   colorFilter: widget.isShadow
-                      ? ColorFilter.mode(Colors.black, BlendMode.srcIn)
+                      ? const ColorFilter.mode(Colors.black, BlendMode.srcIn)
                       : null,
                   image: AssetImage(widget.imgSrc),
                 ),
@@ -147,7 +145,7 @@ class _PlainDoorState extends State<PlainDoor>
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   colorFilter: widget.isShadow
-                      ? ColorFilter.mode(Colors.black, BlendMode.srcIn)
+                      ? const ColorFilter.mode(Colors.black, BlendMode.srcIn)
                       : null,
                   image: AssetImage(widget.imgSrc),
                 ),

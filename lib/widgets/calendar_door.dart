@@ -7,7 +7,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/widgets/plain_door.dart';
 import 'package:particles_flutter/particles_flutter.dart';
-import 'package:pimp_my_button/pimp_my_button.dart';
 
 _CalendarDoorState globalState = _CalendarDoorState();
 
@@ -19,15 +18,16 @@ class CalendarDoor extends StatefulWidget {
   final int iterator;
   final CalendarModel calendar;
   final bool isDoorOpen;
-  const CalendarDoor({
-    required this.imgSrc,
-    this.day,
-    required this.doorSize,
-    this.isLast = false,
-    required this.iterator,
-    required this.calendar,
-    required this.isDoorOpen,
-  });
+  const CalendarDoor(
+      {required this.imgSrc,
+      this.day,
+      required this.doorSize,
+      this.isLast = false,
+      required this.iterator,
+      required this.calendar,
+      required this.isDoorOpen,
+      Key? key})
+      : super(key: key);
 
   @override
   State<CalendarDoor> createState() => _CalendarDoorState();
@@ -40,10 +40,8 @@ class _CalendarDoorState extends State<CalendarDoor> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.day);
     return NotificationListener<DoorPressed>(
       onNotification: (val) {
-        print("tapped from parent");
         setState(() {
           shouldShowParticles = !shouldShowParticles;
         });

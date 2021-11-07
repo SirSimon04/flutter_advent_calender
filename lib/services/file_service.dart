@@ -6,7 +6,6 @@ import 'http.dart' as local_http;
 
 class FileService {
   Future<void> saveImageFromName(String name) async {
-    print("trying to save file");
     final response = await http.get(
         Uri.parse(local_http.HttpHelper.ngrokUrlStatic + "/image/" + name));
 
@@ -15,7 +14,5 @@ class FileService {
     File file = File(join(documentDirectory.path, name));
 
     await file.writeAsBytes(response.bodyBytes);
-
-    print("Saved file at " + join(documentDirectory.path, name));
   }
 }

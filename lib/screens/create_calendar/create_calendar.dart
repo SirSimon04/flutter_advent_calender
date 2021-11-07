@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
 import 'package:image_picker/image_picker.dart';
@@ -133,6 +132,7 @@ class _CreateCalendarState extends State<CreateCalendar>
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () async {
+                        // ignore: deprecated_member_use
                         PickedFile? pickedFile = await ImagePicker().getImage(
                           source: ImageSource.gallery,
                           maxWidth: 1800,
@@ -274,7 +274,7 @@ class _CreateCalendarState extends State<CreateCalendar>
           ),
           Container(
             child: _isLoading
-                ? Loader(
+                ? const Loader(
                     loadingTxt: "Kalender wird erstellt...",
                   )
                 : Container(),

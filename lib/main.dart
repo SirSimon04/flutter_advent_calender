@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/screens/create_calendar/create_calendar.dart';
 import 'package:flutter_advent_calender/screens/own_calendars/own_calendars.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +39,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // print(sha256.convert(utf8.encode(DateTime.now().toString())).toString());
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: const [

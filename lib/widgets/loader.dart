@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Loader extends StatelessWidget {
-  Loader(
+  const Loader(
       {Key? key,
-      this.opacity: 0.5,
-      this.dismissibles: false,
-      this.color: Colors.black,
-      this.loadingTxt: 'Loading...'})
+      this.opacity = 0.5,
+      this.dismissibles = false,
+      this.color = Colors.black,
+      this.loadingTxt = 'Loading...'})
       : super(key: key);
 
   final double opacity;
@@ -23,18 +23,16 @@ class Loader extends StatelessWidget {
           child: const ModalBarrier(dismissible: false, color: Colors.black),
         ),
         Container(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(top: 10),
-            child: CircularProgressIndicator(),
-          ),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 10),
+          child: const CircularProgressIndicator(),
         ),
         Center(
           child: Container(
             margin: const EdgeInsets.only(top: 200),
             child: Text(
               loadingTxt,
-              style: TextStyle(color: Colors.white70, fontSize: 18),
+              style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
           ),
         ),
