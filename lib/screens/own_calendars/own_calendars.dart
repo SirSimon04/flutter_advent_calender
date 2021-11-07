@@ -24,6 +24,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
   bool _isLoading = false;
 
   late Future<List<CalendarModel>> _futureCalList;
+  late Future<int> _futureOpenCount;
 
   HttpHelper httpHelper = HttpHelper();
   DatabaseHandler databaseHandler = DatabaseHandler();
@@ -91,18 +92,12 @@ class _OwnCalendarsState extends State<OwnCalendars>
     );
   }
 
-  // dbTest() async {
-  // print("db test");
-  // DatabaseHandler db = DatabaseHandler();
-  // await db.initializeDB();
-  // print("initialized");
-  // await db.insertCalendar(
-  //     CalendarModel(title: "TESTTITEL", id: "TESTID2", msg: "TESTMSG"));
-  // print("inserted");
-  //   print(await db.getCalendars());
-  // }
-
   Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
+
+  Future<int> calculateDoorsToOpen(String id) async {
+    List openedDoors = await databaseHandler.getOpenedEntries(id);
+    return DateTime.now().day - openedDoors.length;
+  }
 
   @override
   void initState() {
@@ -153,7 +148,22 @@ class _OwnCalendarsState extends State<OwnCalendars>
                         mainAxisSpacing: 12,
                       ),
                       itemBuilder: (context, index) {
-                        return CalendarTile(calendar: snapshot.data?[index]);
+                        return FutureBuilder<int>(
+                            future:
+                                calculateDoorsToOpen(snapshot.data![index].id),
+                            builder: (context2, snapshot2) {
+                              if (snapshot.hasData) {
+                                return CalendarTile(
+                                  calendar: snapshot.data?[index],
+                                  doorsToOpen: snapshot2.data ?? 0,
+                                );
+                              } else {
+                                return CalendarTile(
+                                  calendar: snapshot.data?[index],
+                                  doorsToOpen: 0,
+                                );
+                              }
+                            });
                       },
                     );
                   } else {

@@ -22,7 +22,7 @@ class _CalendarViewState extends State<CalendarView> {
   late Future<List<Map<String, dynamic>>> _futureOpenList;
 
   Future<List<Map<String, dynamic>>> getOpenList() async =>
-      await db.getOpened(widget.calendar.id);
+      await db.getOpenDayEntries(widget.calendar.id);
 
   @override
   void initState() {

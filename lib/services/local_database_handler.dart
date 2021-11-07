@@ -53,10 +53,17 @@ class DatabaseHandler {
     );
   }
 
-  Future<List<Map<String, Object?>>> getOpened(String id) async {
+  Future<List<Map<String, Object?>>> getOpenDayEntries(String id) async {
     final db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.query("opendays", where: "id = ?", whereArgs: [id]);
+    return queryResult;
+  }
+
+  Future<List<Map<String, Object?>>> getOpenedEntries(String id) async {
+    final db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db
+        .query("opendays", where: "id = ? and open = ?", whereArgs: [id, 1]);
     return queryResult;
   }
 

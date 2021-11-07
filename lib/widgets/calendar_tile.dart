@@ -5,16 +5,24 @@ import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart
 
 class CalendarTile extends StatelessWidget {
   final CalendarModel? calendar;
-  const CalendarTile({Key? key, required this.calendar}) : super(key: key);
+  final int doorsToOpen;
+  const CalendarTile({
+    Key? key,
+    required this.calendar,
+    required this.doorsToOpen,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(CupertinoPageRoute(
+        Navigator.of(context).push(
+          CupertinoPageRoute(
             builder: (context) => CalendarView(
-                  calendar: calendar!,
-                )));
+              calendar: calendar!,
+            ),
+          ),
+        );
       },
       child: Stack(
         children: [
@@ -40,7 +48,7 @@ class CalendarTile extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  calendar!.id,
+                  "$doorsToOpen Türchen zu öffnen",
                   style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     fontSize: 16,
