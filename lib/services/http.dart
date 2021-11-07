@@ -61,11 +61,8 @@ class HttpHelper {
           i.toString(),
           images[i]!.readAsBytes().asStream(),
           images[i]!.lengthSync(),
-          filename: (newCalId +
-              "_" +
-              i.toString() +
-              "." +
-              images[i]!.path.split(".").last),
+          filename: (newCalId + "_" + i.toString() + ".jpg"),
+          // images[i]!.path.split(".").last),
         ),
       );
     }

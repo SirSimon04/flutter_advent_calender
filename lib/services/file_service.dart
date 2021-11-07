@@ -9,10 +9,13 @@ class FileService {
     print("trying to save file");
     final response = await http.get(
         Uri.parse(local_http.HttpHelper.ngrokUrlStatic + "/image/" + name));
+
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-    print(join(documentDirectory.path, 'imagetest.png'));
-    File file = File(join(documentDirectory.path, 'imagetest.png'));
+
+    File file = File(join(documentDirectory.path, name));
+
     await file.writeAsBytes(response.bodyBytes);
+
     print("Saved file");
   }
 }
