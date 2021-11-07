@@ -123,6 +123,14 @@ class _OwnCalendarsState extends State<OwnCalendars>
                 future: _futureCalList,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    if (snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
                     return GridView.builder(
                       itemCount: snapshot.data?.length,
                       gridDelegate:
@@ -138,7 +146,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   } else {
                     return const Center(
                       child: Text(
-                        "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                        "Fehler.",
                         textAlign: TextAlign.center,
                       ),
                     );
