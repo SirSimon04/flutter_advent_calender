@@ -43,32 +43,40 @@ class _OwnCalendarsState extends State<OwnCalendars>
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                setState(() {
-                  _isLoading = true;
-                });
-                //Get calendar by id from Server and save to local db
-                CalendarModel c = await httpHelper
-                    .getCalendarFromServer(_textFieldController.text.trim());
-                await databaseHandler.insertCalendar(c);
+                try {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  //Get calendar by id from Server and save to local db
+                  CalendarModel c = await httpHelper
+                      .getCalendarFromServer(_textFieldController.text.trim());
+                  await databaseHandler.insertCalendar(c);
 
-                //Update showing calendars
-                setState(() {
-                  _futureCalList = getCalList();
-                });
+                  //Update showing calendars
+                  setState(() {
+                    _futureCalList = getCalList();
+                  });
 
-                //Saving every image on local storage
-                for (int i = 0; i < 24; i++) {
-                  await fileService
-                      .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+                  //Saving every image on local storage
+                  for (int i = 0; i < 24; i++) {
+                    await fileService
+                        .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+                  }
+
+                  //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
+                  for (int i = 0; i < 24; i++) {
+                    await databaseHandler.insertOpened(id: c.id, day: i);
+                  }
+                  setState(() {
+                    _isLoading = false;
+                  });
+                } on Exception catch (e) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  print("exception " + e.toString());
+                  showSnackBar(context);
                 }
-
-                //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
-                for (int i = 0; i < 24; i++) {
-                  await databaseHandler.insertOpened(id: c.id, day: i);
-                }
-                setState(() {
-                  _isLoading = false;
-                });
               },
               child: const Text(
                 "Hinzufügen",
@@ -91,6 +99,19 @@ class _OwnCalendarsState extends State<OwnCalendars>
   Future<int> calculateDoorsToOpen(String id) async {
     List openedDoors = await databaseHandler.getOpenedEntries(id);
     return DateTime.now().day - openedDoors.length;
+  }
+
+  showSnackBar(context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Der Kalender mit der eingegeben Id wurde nicht gefunden",
+        ),
+        duration: Duration(
+          seconds: 3,
+        ),
+      ),
+    );
   }
 
   @override

@@ -189,73 +189,88 @@ class _CreateCalendarState extends State<CreateCalendar>
                     borderRadius: BorderRadius.circular(30.0),
                     color: Theme.of(context).primaryColor,
                     child: MaterialButton(
-                      onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        HttpHelper http = HttpHelper();
-                        newCalId = await http.uploadCalendar(
-                          msg: _msgController.text.trim(),
-                          title: _titleController.text.trim(),
-                        );
-                        await http.uploadImages(
-                          images: images,
-                          newCalId: newCalId,
-                        );
-                        _msgController.clear();
-                        _titleController.clear();
-                        List<File?> newImages = [];
-                        for (int i = 0; i < 24; i++) {
-                          newImages.add(null);
-                        }
-                        setState(() {
-                          images = newImages;
-                          _isLoading = false;
-                        });
-                        _scrollController.jumpTo(0);
-                        showDialog(
-                          builder: (context) => AlertDialog(
-                            title: const Text(
-                                "Dein Kalender wurde erfolgreich erstellt"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  "Schicke diese Id an deine Freunde",
-                                  textAlign: TextAlign.center,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
-                                  child: Text(
-                                    newCalId,
-                                    textAlign: TextAlign.center,
+                      onPressed: (_titleController.text.trim().isEmpty ||
+                              _msgController.text.trim().isEmpty ||
+                              images.contains(null))
+                          ? () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen",
+                                  ),
+                                  duration: Duration(
+                                    seconds: 3,
                                   ),
                                 ),
-                                Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      FlutterClipboard.copy(newCalId)
-                                          .then((value) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content:
-                                                Text("Erfolgreich kopiert!"),
-                                          ),
-                                        );
-                                      });
-                                    },
-                                    icon: const Icon(Icons.copy),
+                              );
+                            }
+                          : () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              HttpHelper http = HttpHelper();
+                              newCalId = await http.uploadCalendar(
+                                msg: _msgController.text.trim(),
+                                title: _titleController.text.trim(),
+                              );
+                              await http.uploadImages(
+                                images: images,
+                                newCalId: newCalId,
+                              );
+                              _msgController.clear();
+                              _titleController.clear();
+                              List<File?> newImages = [];
+                              for (int i = 0; i < 24; i++) {
+                                newImages.add(null);
+                              }
+                              setState(() {
+                                images = newImages;
+                                _isLoading = false;
+                              });
+                              _scrollController.jumpTo(0);
+                              showDialog(
+                                builder: (context) => AlertDialog(
+                                  title: const Text(
+                                      "Dein Kalender wurde erfolgreich erstellt"),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        "Schicke diese Id an deine Freunde",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12.0),
+                                        child: Text(
+                                          newCalId,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            FlutterClipboard.copy(newCalId)
+                                                .then((value) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      "Erfolgreich kopiert!"),
+                                                ),
+                                              );
+                                            });
+                                          },
+                                          icon: const Icon(Icons.copy),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          context: context,
-                        );
-                      },
+                                ),
+                                context: context,
+                              );
+                            },
                       minWidth: MediaQuery.of(context).size.width * 0.6,
                       height: MediaQuery.of(context).size.height * 0.07,
                       child: const Text(

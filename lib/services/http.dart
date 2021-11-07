@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 class HttpHelper {
   HttpHelper();
@@ -14,7 +15,7 @@ class HttpHelper {
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 404) {
-      throw "not-found";
+      throw Exception("not-found");
     } else {
       throw Exception("Failed to load Calendar");
     }
@@ -24,8 +25,8 @@ class HttpHelper {
     required String title,
     required String msg,
   }) async {
-    String newCalId = "123";
-    // sha256.convert(utf8.encode(DateTime.now().toString())).toString();
+    String newCalId =
+        sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
     await http.post(
       Uri.parse('$ngrokUrl/calendar'),
