@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
+import 'package:flutter_advent_calender/screens/image_fullscreen/image_fullscreen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/widgets/plain_door.dart';
@@ -34,6 +36,8 @@ class CalendarDoor extends StatefulWidget {
 class _CalendarDoorState extends State<CalendarDoor> {
   bool shouldShowParticles = false;
 
+  late String imageUrl;
+
   @override
   Widget build(BuildContext context) {
     print(widget.day);
@@ -61,11 +65,32 @@ class _CalendarDoorState extends State<CalendarDoor> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     try {
-                      return Image.file(
-                        File(
-                            "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg"),
-                        width: 8,
-                        height: 8,
+                      imageUrl =
+                          "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg";
+                      return Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (context) => ImageFullscreen(
+                                  imagePath: imageUrl,
+                                  day: widget.day ?? "",
+                                ),
+                              ),
+                            );
+                          },
+                          child: Image.file(
+                            File(
+                                "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg"),
+                            width: 8,
+                            height: 8,
+                            // alignment: Alignment.center,
+                            // fit: BoxFit.cover,
+
+                            // width: widget.doorSize.width,
+                            // height: widget.doorSize.height,
+                          ),
+                        ),
                       );
                     } catch (e) {
                       return const Text("Fehler");
