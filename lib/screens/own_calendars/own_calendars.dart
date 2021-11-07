@@ -48,7 +48,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   _isLoading = true;
                 });
                 try {
-                  await databaseHandler.deleteDB();
                   //Get calendar by id from Server and save to local db
                   CalendarModel c = await httpHelper
                       .getCalendarFromServer(_textFieldController.text.trim());

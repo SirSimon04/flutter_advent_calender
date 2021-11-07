@@ -67,17 +67,23 @@ class _PlainDoorState extends State<PlainDoor>
     db.updateOpened(id: widget.calendar?.id ?? "", day: widget.iterator);
   }
 
+  bool checkIfDoorIsOpenable() {
+    DateTime doorDate = DateTime(2021, 11, widget.iterator + 1);
+    return doorDate.isBefore(DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (widget.isShadow || widget.func == null)
-          ? null
-          : () {
-              bool loadCheck = _anim != null || _anim != null;
-              widget.func!(loadCheck, _at);
-              gdClicked();
-              updateDBEntry();
-            },
+      onTap:
+          (widget.isShadow || widget.func == null || !checkIfDoorIsOpenable())
+              ? null
+              : () {
+                  bool loadCheck = _anim != null || _anim != null;
+                  widget.func!(loadCheck, _at);
+                  gdClicked();
+                  updateDBEntry();
+                },
       child: widget.isOpen
           ? Container(
               transform: Matrix4(
