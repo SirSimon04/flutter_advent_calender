@@ -88,7 +88,7 @@ class _CalendarViewState extends State<CalendarView> {
     290,
     300,
     300,
-    290,
+    450,
     300,
     370,
     290,
@@ -104,7 +104,7 @@ class _CalendarViewState extends State<CalendarView> {
   List right = [
     100,
     300,
-    280,
+    320,
     300,
     190,
     20,

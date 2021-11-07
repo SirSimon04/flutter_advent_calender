@@ -123,67 +123,73 @@ class _OwnCalendarsState extends State<OwnCalendars>
           )
         ],
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: FutureBuilder<List<CalendarModel>>(
-                future: _futureCalList,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.isEmpty) {
+      body: NotificationListener<ComeBackFromCalendarView>(
+        onNotification: (val) {
+          setState(() {});
+          return true;
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: FutureBuilder<List<CalendarModel>>(
+                  future: _futureCalList,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                      return GridView.builder(
+                        itemCount: snapshot.data?.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                        itemBuilder: (context, index) {
+                          return FutureBuilder<int>(
+                              future: calculateDoorsToOpen(
+                                  snapshot.data![index].id),
+                              builder: (context2, snapshot2) {
+                                if (snapshot.hasData) {
+                                  return CalendarTile(
+                                    calendar: snapshot.data?[index],
+                                    doorsToOpen: snapshot2.data ?? 0,
+                                  );
+                                } else {
+                                  return CalendarTile(
+                                    calendar: snapshot.data?[index],
+                                    doorsToOpen: 0,
+                                  );
+                                }
+                              });
+                        },
+                      );
+                    } else {
                       return const Center(
                         child: Text(
-                          "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                          "Fehler.",
                           textAlign: TextAlign.center,
                         ),
                       );
                     }
-                    return GridView.builder(
-                      itemCount: snapshot.data?.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                      ),
-                      itemBuilder: (context, index) {
-                        return FutureBuilder<int>(
-                            future:
-                                calculateDoorsToOpen(snapshot.data![index].id),
-                            builder: (context2, snapshot2) {
-                              if (snapshot.hasData) {
-                                return CalendarTile(
-                                  calendar: snapshot.data?[index],
-                                  doorsToOpen: snapshot2.data ?? 0,
-                                );
-                              } else {
-                                return CalendarTile(
-                                  calendar: snapshot.data?[index],
-                                  doorsToOpen: 0,
-                                );
-                              }
-                            });
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text(
-                        "Fehler.",
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  }
-                }),
-          ),
-          Container(
-            child: _isLoading
-                ? Loader(
-                    loadingTxt: "Kalender wird geladen...",
-                  )
-                : Container(),
-          ),
-        ],
+                  }),
+            ),
+            Container(
+              child: _isLoading
+                  ? Loader(
+                      loadingTxt: "Kalender wird geladen...",
+                    )
+                  : Container(),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/screens/calendar_view/calendar_view.dart';
 
+class ComeBackFromCalendarView extends Notification {
+  ComeBackFromCalendarView();
+}
+
 class CalendarTile extends StatelessWidget {
   final CalendarModel? calendar;
   final int doorsToOpen;
@@ -16,13 +20,15 @@ class CalendarTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (context) => CalendarView(
-              calendar: calendar!,
-            ),
-          ),
-        );
+        Navigator.of(context)
+            .push(
+              CupertinoPageRoute(
+                builder: (context) => CalendarView(
+                  calendar: calendar!,
+                ),
+              ),
+            )
+            .then((value) => ComeBackFromCalendarView().dispatch(context));
       },
       child: Stack(
         children: [
@@ -48,7 +54,9 @@ class CalendarTile extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "$doorsToOpen Türchen zu öffnen",
+                  doorsToOpen == 0
+                      ? "Alles geöffnet"
+                      : "$doorsToOpen Türchen zu öffnen",
                   style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     fontSize: 16,

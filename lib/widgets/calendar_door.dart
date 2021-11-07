@@ -36,6 +36,7 @@ class _CalendarDoorState extends State<CalendarDoor> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.day);
     return NotificationListener<DoorPressed>(
       onNotification: (val) {
         print("tapped from parent");
