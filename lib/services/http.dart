@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
+class NotFoundException implements Exception {}
+
 class HttpHelper {
   HttpHelper();
   static String ngrokUrlStatic = "https://8d26-91-49-177-26.ngrok.io";
@@ -15,7 +17,7 @@ class HttpHelper {
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 404) {
-      throw Exception("not-found");
+      throw NotFoundException();
     } else {
       throw Exception("Failed to load Calendar");
     }

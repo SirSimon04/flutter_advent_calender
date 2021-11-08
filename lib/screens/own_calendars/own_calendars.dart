@@ -4,8 +4,10 @@ import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
+import 'package:flutter_advent_calender/services/toast_service.dart';
 import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
+import 'package:sqflite/sqflite.dart';
 
 class OwnCalendars extends StatefulWidget {
   const OwnCalendars({Key? key}) : super(key: key);
@@ -50,8 +52,9 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   //Get calendar by id from Server and save to local db
                   CalendarModel c = await httpHelper
                       .getCalendarFromServer(_textFieldController.text.trim());
+                  print("before inserting");
                   await databaseHandler.insertCalendar(c);
-
+                  print("after inserting");
                   //Update showing calendars
                   setState(() {
                     _futureCalList = getCalList();
@@ -70,12 +73,30 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   setState(() {
                     _isLoading = false;
                   });
-                } on Exception catch (e) {
+                } on NotFoundException catch (e) {
                   setState(() {
                     _isLoading = false;
                   });
-                  print("exception " + e.toString());
-                  showSnackBar(context);
+                  ToastService.showLongToast(
+                      "Der Kalender mit der eingegeben Id wurde nicht gefunden");
+                } on DatabaseException catch (e) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  if (e.isUniqueConstraintError()) {
+                    ToastService.showLongToast(
+                        "Diser Kalender wurde schon hinzugefügt");
+                  } else {
+                    ToastService.showLongToast(
+                        "Beim Laden des Kalenders ist ein Fehler aufgetreten");
+                  }
+                } catch (e) {
+                  print(e);
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  ToastService.showLongToast(
+                      "Beim Laden des Kalenders ist ein Fehler aufgetreten");
                 }
               },
               child: const Text(

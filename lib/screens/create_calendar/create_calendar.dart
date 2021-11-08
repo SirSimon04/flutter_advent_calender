@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/services/http.dart';
+import 'package:flutter_advent_calender/services/toast_service.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -193,16 +194,8 @@ class _CreateCalendarState extends State<CreateCalendar>
                               _msgController.text.trim().isEmpty ||
                               images.contains(null))
                           ? () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen",
-                                  ),
-                                  duration: Duration(
-                                    seconds: 3,
-                                  ),
-                                ),
-                              );
+                              ToastService.showLongToast(
+                                  "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
                             }
                           : () async {
                               setState(() {
