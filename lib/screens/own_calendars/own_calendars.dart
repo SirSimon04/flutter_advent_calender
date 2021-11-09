@@ -176,7 +176,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                       if (snapshot.data!.isEmpty) {
                         return const Center(
                           child: Text(
-                            "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus hinzufügen.",
+                            "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus oben rechts hinzufügen.",
                             textAlign: TextAlign.center,
                           ),
                         );
@@ -211,7 +211,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                     } else {
                       return const Center(
                         child: Text(
-                          "Fehler.",
+                          "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus oben rechts hinzufügen.",
                           textAlign: TextAlign.center,
                         ),
                       );
