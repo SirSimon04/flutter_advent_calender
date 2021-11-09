@@ -139,6 +139,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
+    databaseHandler.deleteDB();
   }
 
   @override
@@ -220,7 +221,8 @@ class _OwnCalendarsState extends State<OwnCalendars>
             Container(
               child: _isLoading
                   ? const Loader(
-                      loadingTxt: "Kalender wird geladen...",
+                      loadingTxt:
+                          "Dein Kalender wird geladen, Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder heruntergeladen werden.",
                     )
                   : Container(),
             ),

@@ -8,12 +8,11 @@ class NotFoundException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  static String ngrokUrlStatic = "https://8d26-91-49-177-26.ngrok.io";
-  final String ngrokUrl = "https://8d26-91-49-177-26.ngrok.io";
+  final String ngrokUrl = "http://synologynas-simon.ddns.net:5555";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
     final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
-
+    print(Uri.parse(ngrokUrl + "/calendar/" + id));
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 404) {

@@ -75,6 +75,8 @@ class DatabaseHandler {
 
   Future<void> deleteDB() async {
     String path = await getDatabasesPath();
+    print("deleting");
     await deleteDatabase(join(path, 'example.db'));
+    print("finish3ed delete");
   }
 }

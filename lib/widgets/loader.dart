@@ -29,9 +29,10 @@ class Loader extends StatelessWidget {
         ),
         Center(
           child: Container(
-            margin: const EdgeInsets.only(top: 200),
+            margin: const EdgeInsets.all(200),
             child: Text(
               loadingTxt,
+              textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
           ),

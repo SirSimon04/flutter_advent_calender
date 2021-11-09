@@ -6,9 +6,8 @@ import 'http.dart' as local_http;
 
 class FileService {
   Future<void> saveImageFromName(String name) async {
-    final response = await http.get(
-        Uri.parse(local_http.HttpHelper.ngrokUrlStatic + "/image/" + name));
-
+    final response = await http
+        .get(Uri.parse("http://synologynas-simon.ddns.net:5555/image/" + name));
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
     File file = File(join(documentDirectory.path, name));
