@@ -222,7 +222,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
               child: _isLoading
                   ? const Loader(
                       loadingTxt:
-                          "Dein Kalender wird geladen, Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder heruntergeladen werden.",
+                          "Dein Kalender wird geladen, Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder heruntergeladen werden. Bitte verbleibe dabei in dieser Ansicht.",
                     )
                   : Container(),
             ),
