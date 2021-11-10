@@ -32,7 +32,7 @@ class _CalendarViewState extends State<CalendarView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Adventskalender"),
+        title: Text(widget.calendar.title),
       ),
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -49,7 +49,9 @@ class _CalendarViewState extends State<CalendarView> {
                       ),
                       for (int i = 0; i < 24; i++)
                         Positioned(
-                          bottom: bottom[23 - i].toDouble(),
+                          bottom: widget.calendar.bgId != 1
+                              ? bottom[23 - i].toDouble()
+                              : (bottom[23 - i] - 150).toDouble(),
                           right: right[23 - i].toDouble(),
                           child: CalendarDoor(
                             iterator: i,
