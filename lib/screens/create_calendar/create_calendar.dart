@@ -22,6 +22,13 @@ class _CreateCalendarState extends State<CreateCalendar>
 
   bool _isLoading = false;
 
+  List<bool> selectedBg = [
+    true,
+    false,
+    false,
+    false,
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -167,6 +174,81 @@ class _CreateCalendarState extends State<CreateCalendar>
                         decoration: BoxDecoration(
                             color: Colors.blueGrey,
                             borderRadius: BorderRadius.circular(16)),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: const Divider(
+                    thickness: 4,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Center(
+                  child: Text(
+                    "Hintergrundbild",
+                    style: TextStyle(fontSize: 32),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  "Tippe auf ein Hintergrundbild, um es auszuwählen",
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: 4,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        List<bool> newList = [];
+                        for (int i = 0; i < 4; i++) {
+                          if (i == index) {
+                            newList.add(true);
+                          } else {
+                            newList.add(false);
+                          }
+                        }
+                        setState(() {
+                          selectedBg = newList;
+                        });
+                      },
+                      child: Opacity(
+                        opacity: selectedBg[index] ? 1 : 0.5,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16.0),
+                                child: Image.asset(
+                                  "assets/background.jpg",
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.circular(16)),
+                        ),
                       ),
                     );
                   },
