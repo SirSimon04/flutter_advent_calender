@@ -25,6 +25,8 @@ class HttpHelper {
   Future<String> uploadCalendar({
     required String title,
     required String msg,
+    required int bgId,
+    required int doorId,
   }) async {
     String newCalId =
         sha256.convert(utf8.encode(DateTime.now().toString())).toString();
@@ -34,12 +36,14 @@ class HttpHelper {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'id': newCalId,
         "title": title,
         "msg": msg,
         "from": "VON DICH",
-        "to": "FÜR MICH"
+        "to": "FÜR MICH",
+        "bgId": bgId,
+        "doorId": doorId
       }),
     );
 

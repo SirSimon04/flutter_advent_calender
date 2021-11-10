@@ -9,7 +9,7 @@ class DatabaseHandler {
       join(path, 'example.db'),
       onCreate: (database, version) async {
         await database.execute(
-            "CREATE TABLE IF NOT EXISTS calendars(id TEXT PRIMARY KEY, title TEXT, msg TEXT); ");
+            "CREATE TABLE IF NOT EXISTS calendars(id TEXT PRIMARY KEY, title TEXT, msg TEXT, doorId INTEGER, bgId INTEGER); ");
       },
       version: 1,
     );

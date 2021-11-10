@@ -25,7 +25,10 @@ class _CreateCalendarState extends State<CreateCalendar>
   List<bool> selectedBg = [
     true,
     false,
-    false,
+  ];
+
+  List<bool> selectedDoors = [
+    true,
     false,
   ];
 
@@ -215,13 +218,13 @@ class _CreateCalendarState extends State<CreateCalendar>
                     mainAxisSpacing: 20,
                   ),
                   shrinkWrap: true,
-                  itemCount: 4,
+                  itemCount: 2,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () async {
                         List<bool> newList = [];
-                        for (int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 2; i++) {
                           if (i == index) {
                             newList.add(true);
                           } else {
@@ -241,7 +244,85 @@ class _CreateCalendarState extends State<CreateCalendar>
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(16.0),
                                 child: Image.asset(
-                                  "assets/background.jpg",
+                                  "assets/background_$index.jpg",
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.circular(16)),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: const Divider(
+                    thickness: 4,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Center(
+                  child: Text(
+                    "Türchen",
+                    style: TextStyle(fontSize: 32),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  "Tippe auf eine Tür, um sie auszuwählen",
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        List<bool> newList = [];
+                        for (int i = 0; i < 2; i++) {
+                          if (i == index) {
+                            newList.add(true);
+                          } else {
+                            newList.add(false);
+                          }
+                        }
+                        setState(() {
+                          selectedDoors = newList;
+                        });
+                      },
+                      child: Opacity(
+                        opacity: selectedDoors[index] ? 1 : 0.5,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16.0),
+                                child: Image.asset(
+                                  "assets/door_$index.png",
                                   fit: BoxFit.cover,
                                 )),
                           ),
@@ -287,6 +368,8 @@ class _CreateCalendarState extends State<CreateCalendar>
                               newCalId = await http.uploadCalendar(
                                 msg: _msgController.text.trim(),
                                 title: _titleController.text.trim(),
+                                bgId: selectedBg.indexOf(true),
+                                doorId: selectedDoors.indexOf(true),
                               );
                               await http.uploadImages(
                                 images: images,

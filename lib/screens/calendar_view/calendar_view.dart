@@ -44,7 +44,8 @@ class _CalendarViewState extends State<CalendarView> {
                   child: Stack(
                     children: [
                       Center(
-                        child: Image.asset("assets/background.jpg"),
+                        child: Image.asset(
+                            "assets/background_${widget.calendar.bgId}.jpg"),
                       ),
                       for (int i = 0; i < 24; i++)
                         Positioned(
@@ -52,7 +53,7 @@ class _CalendarViewState extends State<CalendarView> {
                           right: right[23 - i].toDouble(),
                           child: CalendarDoor(
                             iterator: i,
-                            imgSrc: "assets/törchen.png",
+                            imgSrc: "assets/door_${widget.calendar.doorId}.png",
                             day: "${i + 1}",
                             doorSize: const Size(17, 25),
                             isLast: i == 23,
