@@ -28,8 +28,8 @@ class Loader extends StatelessWidget {
           child: const CircularProgressIndicator(),
         ),
         Center(
-          child: Container(
-            margin: const EdgeInsets.all(200),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
             child: Text(
               loadingTxt,
               textAlign: TextAlign.center,

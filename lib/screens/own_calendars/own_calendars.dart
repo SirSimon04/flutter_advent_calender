@@ -139,7 +139,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
   void initState() {
     super.initState();
     _futureCalList = getCalList();
-    databaseHandler.deleteDB();
   }
 
   @override
