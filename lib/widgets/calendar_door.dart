@@ -70,6 +70,7 @@ class _CalendarDoorState extends State<CalendarDoor> {
                             builder: (context) => ImageFullscreen(
                               imagePath: imageUrl,
                               day: widget.day ?? "",
+                              calendar: widget.calendar,
                             ),
                           ),
                         );
