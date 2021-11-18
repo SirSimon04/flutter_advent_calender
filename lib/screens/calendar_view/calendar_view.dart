@@ -37,10 +37,13 @@ class _CalendarViewState extends State<CalendarView> {
         banner = BannerAd(
           adUnitId: adState.bannerAdUnitId,
           size: AdSize.banner,
-          listener: BannerAdListener(onAdLoaded: (ad) {
-            setState(() {});
-            isBannerAdReady = true;
-          }),
+          listener: BannerAdListener(
+              onAdLoaded: (ad) {
+                setState(() {});
+                isBannerAdReady = true;
+              },
+              onAdFailedToLoad: (ad, e) =>
+                  print("failed to load ad ${ad.adUnitId} ${e.message}")),
           request: const AdRequest(),
         )..load();
       });

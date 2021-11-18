@@ -38,32 +38,39 @@ class CalendarTile extends StatelessWidget {
               color: Colors.blueGrey,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  calendar!.title,
-                  style: const TextStyle(fontSize: 32),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  doorsToOpen == 0
-                      ? "Alles geöffnet"
-                      : "$doorsToOpen Türchen zu öffnen",
-                  style: const TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 16,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                  textAlign: TextAlign.center,
-                )
-              ],
+                  Text(
+                    calendar!.title,
+                    style: const TextStyle(fontSize: 32),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    doorsToOpen == 0
+                        ? "Alles geöffnet"
+                        : "$doorsToOpen Türchen zu öffnen",
+                    style: const TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             ),
           ),
           Positioned(
