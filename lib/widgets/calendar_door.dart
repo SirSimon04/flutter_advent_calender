@@ -48,6 +48,7 @@ class _CalendarDoorState extends State<CalendarDoor> {
         return true;
       },
       child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
           PlainDoor(
             imgSrc: widget.imgSrc,
@@ -55,49 +56,47 @@ class _CalendarDoorState extends State<CalendarDoor> {
             isShadow: true,
             iterator: 0,
           ),
-          Positioned(
-            bottom: 10,
-            right: 4,
-            child: FutureBuilder<Directory>(
-                future: getApplicationDocumentsDirectory(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    try {
-                      imageUrl =
-                          "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg";
-                      return Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                builder: (context) => ImageFullscreen(
-                                  imagePath: imageUrl,
-                                  day: widget.day ?? "",
-                                ),
-                              ),
-                            );
-                          },
-                          child: Image.file(
-                            File(
-                                "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg"),
-                            width: 8,
-                            height: 8,
-                            // alignment: Alignment.center,
-                            // fit: BoxFit.cover,
-
-                            // width: widget.doorSize.width,
-                            // height: widget.doorSize.height,
+          FutureBuilder<Directory>(
+              future: getApplicationDocumentsDirectory(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  try {
+                    imageUrl =
+                        "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg";
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (context) => ImageFullscreen(
+                              imagePath: imageUrl,
+                              day: widget.day ?? "",
+                            ),
                           ),
+                        );
+                      },
+                      child: SizedBox(
+                        height: widget.doorSize.height - 5,
+                        width: widget.doorSize.width - 2,
+                        child: Image.file(
+                          File(
+                              "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg"),
+                          width: 8,
+                          height: 8,
+                          // alignment: Alignment.center,
+                          // fit: BoxFit.cover,
+
+                          // width: widget.doorSize.width,
+                          // height: widget.doorSize.height,
                         ),
-                      );
-                    } catch (e) {
-                      return const Text("Fehler");
-                    }
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
+                      ),
+                    );
+                  } catch (e) {
+                    return const Text("Fehler");
                   }
-                }),
-          ),
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }),
           widget.isLast
               ? Visibility(
                   visible: shouldShowParticles,
