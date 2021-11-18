@@ -16,6 +16,16 @@ class CalendarTile extends StatelessWidget {
     required this.doorsToOpen,
   }) : super(key: key);
 
+  String getDoorsOpenText() {
+    if (doorsToOpen == 0) {
+      return "Alle geöffnet";
+    } else if (doorsToOpen == -1) {
+      return "Du musst noch warten";
+    } else {
+      return "$doorsToOpen Türchen zu öffnen";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -58,9 +68,7 @@ class CalendarTile extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    doorsToOpen == 0
-                        ? "Alles geöffnet"
-                        : "$doorsToOpen Türchen zu öffnen",
+                    getDoorsOpenText(),
                     style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       fontSize: 16,
