@@ -35,7 +35,7 @@ class _CalendarViewState extends State<CalendarView> {
     adState.initialization.then((value) {
       setState(() {
         banner = BannerAd(
-          adUnitId: adState.bannerAdUnitId,
+          adUnitId: adState.calendarViewBottomAd,
           size: AdSize.banner,
           listener: BannerAdListener(
               onAdLoaded: (ad) {

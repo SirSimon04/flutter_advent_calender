@@ -154,7 +154,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
     adState.initialization.then((value) {
       setState(() {
         banner = BannerAd(
-          adUnitId: adState.bannerAdUnitId,
+          adUnitId: adState.calendarsViewBottomAd,
           size: AdSize.banner,
           listener: BannerAdListener(
               onAdLoaded: (ad) {
