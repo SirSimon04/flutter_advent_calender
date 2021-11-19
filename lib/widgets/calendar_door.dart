@@ -34,6 +34,7 @@ class CalendarDoor extends StatefulWidget {
 }
 
 class _CalendarDoorState extends State<CalendarDoor> {
+  //If the particles should be shown
   bool shouldShowParticles = false;
 
   late String imageUrl;
