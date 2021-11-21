@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_advent_calender")
-set(APPLICATION_ID "com.example.flutter_advent_calender")
+set(BINARY_NAME "Advent4you")
+set(APPLICATION_ID "com.simonengel.advent4you")
 
 cmake_policy(SET CMP0063 NEW)
 
