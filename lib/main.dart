@@ -19,7 +19,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: const SafeArea(child: MyApp()),
+      home: MyApp(),
     );
   }
 }

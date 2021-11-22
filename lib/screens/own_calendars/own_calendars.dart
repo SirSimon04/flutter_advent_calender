@@ -115,6 +115,11 @@ class _OwnCalendarsState extends State<OwnCalendars>
       },
     );
   }
+  @override
+  void initState(){
+    super.initState();
+    _futureCalList = getCalList();
+  }
 
   Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
 
