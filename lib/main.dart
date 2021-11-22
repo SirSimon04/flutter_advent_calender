@@ -2,20 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/screens/create_calendar/create_calendar.dart';
 import 'package:flutter_advent_calender/screens/own_calendars/own_calendars.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'models/ad_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final initFuture = MobileAds.instance.initialize();
-  final adState = AdState(initFuture);
 
-  runApp(
-    Provider.value(
-      value: adState,
-      builder: (context, child) => App(),
-    ),
+  runApp(const App()
   );
 }
 

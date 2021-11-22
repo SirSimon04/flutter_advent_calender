@@ -49,5 +49,11 @@
     </array>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Advent4you braucht den Fotozugriff, um Fotos für den Kalender hochzuladen</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>some description</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>some description</string>
+
+
 </dict>
 </plist>
