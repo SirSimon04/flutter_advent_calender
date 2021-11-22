@@ -47,5 +47,7 @@
     <array>
         <string>UIInterfaceOrientationPortrait</string>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Advent4you braucht den Fotozugriff, um Fotos für den Kalender hochzuladen</string>
 </dict>
 </plist>
