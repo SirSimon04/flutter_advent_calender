@@ -8,9 +8,9 @@ class AdState {
 
   String get calendarViewBottomAd => Platform.isAndroid
       ? "ca-app-pub-1042536658048489/4283857849"
-      : "ca-app-pub-3940256099942544/2934735716";
+      : "ca-app-pub-1042536658048489/6135161414";
 
   String get calendarsViewBottomAd => Platform.isAndroid
       ? "ca-app-pub-1042536658048489/6982366893"
-      : "ca-app-pub-3940256099942544/2934735716";
+      : "ca-app-pub-1042536658048489/4289271861";
 }
