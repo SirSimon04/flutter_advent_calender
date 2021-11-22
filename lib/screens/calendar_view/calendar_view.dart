@@ -36,47 +36,45 @@ class _CalendarViewState extends State<CalendarView> {
       appBar: AppBar(
         title: Text(widget.calendar.title),
       ),
-      body: Expanded(
-        child: Center(
-          child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: _futureOpenList,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return InteractiveViewer(
-                    maxScale: 60,
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: Image.asset(
-                              "assets/background_${widget.calendar.bgId}.jpg"),
-                        ),
-                        for (int i = 0; i < 24; i++)
-                          Positioned(
-                            bottom: widget.calendar.bgId != 1
-                                ? bottom[23 - i].toDouble()
-                                : (bottom[23 - i] - 150).toDouble(),
-                            right: right[23 - i].toDouble(),
-                            child: CalendarDoor(
-                              iterator: i,
-                              imgSrc:
-                                  "assets/door_${widget.calendar.doorId}.png",
-                              day: "${i + 1}",
-                              doorSize: const Size(17, 25),
-                              isLast: i == 23,
-                              calendar: widget.calendar,
-                              isDoorOpen: snapshot.data![i]["open"] == 1,
-                            ),
+      body: Center(
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: _futureOpenList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return InteractiveViewer(
+                  maxScale: 60,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Image.asset(
+                            "assets/background_${widget.calendar.bgId}.jpg"),
+                      ),
+                      for (int i = 0; i < 24; i++)
+                        Positioned(
+                          bottom: widget.calendar.bgId != 1
+                              ? bottom[23 - i].toDouble()
+                              : (bottom[23 - i] - 150).toDouble(),
+                          right: right[23 - i].toDouble(),
+                          child: CalendarDoor(
+                            iterator: i,
+                            imgSrc:
+                                "assets/door_${widget.calendar.doorId}.png",
+                            day: "${i + 1}",
+                            doorSize: const Size(17, 25),
+                            isLast: i == 23,
+                            calendar: widget.calendar,
+                            isDoorOpen: snapshot.data![i]["open"] == 1,
                           ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-        ),
+                        ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
     );
   }
