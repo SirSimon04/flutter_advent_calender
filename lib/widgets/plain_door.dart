@@ -66,7 +66,7 @@ class _PlainDoorState extends State<PlainDoor>
   }
 
   bool checkIfDoorIsOpenable() {
-    DateTime doorDate = DateTime(2021, 11, widget.iterator + 1);
+    DateTime doorDate = DateTime(2021, 12, widget.iterator + 1);
     return doorDate.isBefore(DateTime.now());
   }
 
