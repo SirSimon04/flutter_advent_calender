@@ -23,6 +23,34 @@ class _CalendarViewState extends State<CalendarView> {
   Future<List<Map<String, dynamic>>> getOpenList() async =>
       await db.getOpenDayEntries(widget.calendar.id);
 
+  List<List<double>> calculatePositions(BuildContext context) {
+    print("calculatePos called");
+    List<double> bottomList = [];
+    List<double> rightList = [];
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    double widthOne = width / 9;
+    double heightOne = height /
+        4 *
+        0.3333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
+    print("before for");
+    for (int i = 0; i < 24; i++) {
+      rightList.add((widthOne * ((i % 8) + 1)));
+    }
+
+    for (int i = 0; i < 24; i++) {
+      if (widget.calendar.bgId == 1) {
+        bottomList.add((heightOne * ((i % 3))) + height * 0.5);
+      } else if (widget.calendar.bgId == 0) {
+        bottomList.add((heightOne * ((i % 3))) + height * 0.35);
+      }
+    }
+
+    print("finished calculate");
+    return [bottomList, rightList];
+  }
 
   @override
   void initState() {
@@ -32,6 +60,7 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
+    List<List<double>> posList = calculatePositions(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.calendar.title),
@@ -47,18 +76,16 @@ class _CalendarViewState extends State<CalendarView> {
                     children: [
                       Center(
                         child: Image.asset(
-                            "assets/background_${widget.calendar.bgId}.jpg"),
+                          "assets/background_${widget.calendar.bgId}.jpg",
+                        ),
                       ),
                       for (int i = 0; i < 24; i++)
                         Positioned(
-                          bottom: widget.calendar.bgId != 1
-                              ? bottom[23 - i].toDouble()
-                              : (bottom[23 - i] - 150).toDouble(),
-                          right: right[23 - i].toDouble(),
+                          top: posList[0][i].toDouble(),
+                          right: posList[1][i].toDouble(),
                           child: CalendarDoor(
                             iterator: i,
-                            imgSrc:
-                                "assets/door_${widget.calendar.doorId}.png",
+                            imgSrc: "assets/door_${widget.calendar.doorId}.png",
                             day: "${i + 1}",
                             doorSize: const Size(17, 25),
                             isLast: i == 23,
@@ -79,32 +106,7 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  List bottom = [
-    350,
-    350,
-    350,
-    350,
-    350,
-    350,
-    350,
-    350,
-    400,
-    400,
-    400,
-    400,
-    400,
-    400,
-    400,
-    400,
-    450,
-    450,
-    450,
-    450,
-    450,
-    450,
-    450,
-    450,
-  ];
+  List<double> bottom = <double>[];
   List right = [
     20,
     70,
