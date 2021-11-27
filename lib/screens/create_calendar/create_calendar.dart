@@ -448,7 +448,8 @@ class _CreateCalendarState extends State<CreateCalendar>
           Container(
             child: _isLoading
                 ? const Loader(
-                    loadingTxt: "Kalender wird erstellt...",
+                    loadingTxt:
+                        "Dein Kalender wird erstellt. Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder hochgeladen werden müssen. Bitte verbleibe dabei in dieser Ansicht",
                   )
                 : Container(),
           ),
