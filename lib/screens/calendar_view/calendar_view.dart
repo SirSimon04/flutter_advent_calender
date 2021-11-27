@@ -31,10 +31,18 @@ class _CalendarViewState extends State<CalendarView> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
+    double heightOne = 0;
+
     double widthOne = width / 9;
-    double heightOne = height /
-        4 *
-        0.3333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
+    if(widget.calendar.bgId == 0) {
+       heightOne = height /
+          4 *
+          0.3333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
+    }
+    else{
+        heightOne = height / 4 * 0.2222;
+
+    }
     print("before for");
     for (int i = 0; i < 24; i++) {
       rightList.add((widthOne * ((i % 8) + 1)));
