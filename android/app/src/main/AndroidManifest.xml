@@ -2,7 +2,9 @@
     package="com.example.flutter_advent_calender">
    <application
         android:label="Advent4you"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/launcher_icon"
+        android:requestLegacyExternalStorage="true"
+        >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -43,4 +45,5 @@
            android:value="ca-app-pub-1042536658048489~4943824082"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>
