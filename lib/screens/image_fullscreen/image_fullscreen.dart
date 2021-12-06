@@ -3,6 +3,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
+import 'package:flutter_advent_calender/services/toast_service.dart';
 
 class ImageFullscreen extends StatefulWidget {
   final String imagePath;
@@ -20,10 +21,11 @@ class ImageFullscreen extends StatefulWidget {
 }
 
 class _ImageFullscreenState extends State<ImageFullscreen> {
-  void saveImage() {
-    ImageGallerySaver.saveImage(File(
+  void saveImage() async {
+    await ImageGallerySaver.saveImage(File(
       widget.imagePath,
     ).readAsBytesSync());
+    ToastService.showLongToast("Das Bild wurde erfolgreich heruntergeladen");
   }
 
   @override
