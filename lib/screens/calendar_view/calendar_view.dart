@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
+import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:flutter_advent_calender/widgets/calendar_door.dart';
+import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:provider/provider.dart';
 
 class CalendarView extends StatefulWidget {
@@ -19,11 +21,20 @@ class CalendarView extends StatefulWidget {
 
 class _CalendarViewState extends State<CalendarView> {
   DatabaseHandler db = DatabaseHandler();
-
+  FileService fileService = FileService();
   late Future<List<Map<String, dynamic>>> _futureOpenList;
 
   Future<List<Map<String, dynamic>>> getOpenList() async =>
       await db.getOpenDayEntries(widget.calendar.id);
+
+  Future<void> deleteCalendar() async {
+    for (int i = 0; i < 24; i++) {
+      await fileService.deleteImageFromName(
+          widget.calendar.id + "_" + i.toString() + ".jpg");
+      // await db.deleteOpened(id: widget.calendar.id, day: i);
+    }
+    await db.deleteCalendar(widget.calendar.id);
+  }
 
   void showDeleteDialog() {
     showDialog(
@@ -35,12 +46,13 @@ class _CalendarViewState extends State<CalendarView> {
                   actions: <Widget>[
                     CupertinoDialogAction(
                         onPressed: () {
-                          //TODO: delete Cal
                           Navigator.of(context).pop();
                         },
                         child: const Text('Schließen')),
                     CupertinoDialogAction(
-                      onPressed: () {
+                      onPressed: () async {
+                        await deleteCalendar();
+                        Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
                       child: const Text('Löschen'),
@@ -53,12 +65,14 @@ class _CalendarViewState extends State<CalendarView> {
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
-                          //TODO: delete Cal
                           Navigator.of(context).pop();
                         },
                         child: const Text('Schließen')),
                     TextButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        print("pressed");
+                        await deleteCalendar();
+                        Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
                       child: const Text('Löschen'),

@@ -30,12 +30,13 @@ class DatabaseHandler {
 
   Future<void> deleteCalendar(String id) async {
     final db = await initializeDB();
-
+    print("in delete");
     await db.delete(
       "calendars",
       where: "id = ?",
-      whereArgs: [id], // you need the id
+      whereArgs: [id],
     );
+    print("after delete");
   }
 
   Future<void> insertOpened({required String id, required int day}) async {
