@@ -6,7 +6,7 @@ class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     Database db = await openDatabase(
-      join(path, 'example.db'),
+      join(path, 'examplex.db'),
       onCreate: (database, version) async {
         await database.execute(
             "CREATE TABLE IF NOT EXISTS calendars(id TEXT PRIMARY KEY, title TEXT, msg TEXT, doorId INTEGER, bgId INTEGER); ");
@@ -54,7 +54,7 @@ class DatabaseHandler {
 
     await db.delete(
       "opendays",
-      where: "id = ? AND day = ?",
+      where: "id = ?",
       whereArgs: [id], // you need the id
     );
   }
@@ -94,8 +94,8 @@ class DatabaseHandler {
     return queryResult.map((e) => CalendarModel.fromMap(e)).toList();
   }
 
-  // Future<void> deleteDB() async {
-  //   String path = await getDatabasesPath();
-  //   await deleteDatabase(join(path, 'example.db'));
-  // }
+  Future<void> deleteDB() async {
+    String path = await getDatabasesPath();
+    await deleteDatabase(join(path, 'example.db'));
+  }
 }

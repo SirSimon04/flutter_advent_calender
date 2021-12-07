@@ -32,7 +32,7 @@ class _CalendarViewState extends State<CalendarView> {
     for (int i = 0; i < 24; i++) {
       await fileService.deleteImageFromName(
           widget.calendar.id + "_" + i.toString() + ".jpg");
-      // await db.deleteOpened(id: widget.calendar.id, day: i);
+      await db.deleteOpened(id: widget.calendar.id, day: i);
     }
     await db.deleteCalendar(widget.calendar.id);
   }
