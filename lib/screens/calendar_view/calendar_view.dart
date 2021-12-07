@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
@@ -23,6 +25,48 @@ class _CalendarViewState extends State<CalendarView> {
   Future<List<Map<String, dynamic>>> getOpenList() async =>
       await db.getOpenDayEntries(widget.calendar.id);
 
+  void showDeleteDialog() {
+    showDialog(
+        context: context,
+        builder: Platform.isIOS
+            ? (context) => CupertinoAlertDialog(
+                  title: const Text('Wirklich löschen?'),
+                  content: const Text("Diese AKtion ist nicht zu widerrufen"),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                        onPressed: () {
+                          //TODO: delete Cal
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Schließen')),
+                    CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Löschen'),
+                    )
+                  ],
+                )
+            : (context) => AlertDialog(
+                  title: const Text('Wirklich löschen?'),
+                  content: const Text("Diese AKtion ist nicht zu widerrufen"),
+                  actions: <Widget>[
+                    TextButton(
+                        onPressed: () {
+                          //TODO: delete Cal
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Schließen')),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Löschen'),
+                    )
+                  ],
+                ));
+  }
+
   List<List<double>> calculatePositions(BuildContext context) {
     print("calculatePos called");
     List<double> bottomList = [];
@@ -34,14 +78,12 @@ class _CalendarViewState extends State<CalendarView> {
     double heightOne = 0;
 
     double widthOne = width / 9;
-    if(widget.calendar.bgId == 0) {
-       heightOne = height /
+    if (widget.calendar.bgId == 0) {
+      heightOne = height /
           4 *
           0.3333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
-    }
-    else{
-        heightOne = height / 4 * 0.2222;
-
+    } else {
+      heightOne = height / 4 * 0.2222;
     }
     print("before for");
     for (int i = 0; i < 24; i++) {
@@ -72,6 +114,10 @@ class _CalendarViewState extends State<CalendarView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.calendar.title),
+        actions: [
+          IconButton(
+              onPressed: showDeleteDialog, icon: const Icon(Icons.delete))
+        ],
       ),
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
