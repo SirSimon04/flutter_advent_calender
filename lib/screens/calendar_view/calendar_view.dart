@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advent_calender/main.dart';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
@@ -54,6 +55,7 @@ class _CalendarViewState extends State<CalendarView> {
                         await deleteCalendar();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
+                        ComeBackFromCalendarView().dispatch(context);
                       },
                       child: const Text('Löschen'),
                     )
@@ -70,10 +72,14 @@ class _CalendarViewState extends State<CalendarView> {
                         child: const Text('Schließen')),
                     TextButton(
                       onPressed: () async {
-                        print("pressed");
                         await deleteCalendar();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(
+                          CupertinoPageRoute(
+                            builder: (context) => const MyApp(),
+                          ),
+                        );
                       },
                       child: const Text('Löschen'),
                     )
