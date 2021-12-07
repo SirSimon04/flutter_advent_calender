@@ -28,6 +28,16 @@ class DatabaseHandler {
     );
   }
 
+  Future<void> deleteCalendar(String id) async {
+    final db = await initializeDB();
+
+    await db.delete(
+      "calendars",
+      where: "id = ?",
+      whereArgs: [id], // you need the id
+    );
+  }
+
   Future<void> insertOpened({required String id, required int day}) async {
     final db = await initializeDB();
 
@@ -36,6 +46,16 @@ class DatabaseHandler {
       "day": day,
       "open": 0,
     });
+  }
+
+  Future<void> deleteOpened({required String id, required int day}) async {
+    final db = await initializeDB();
+
+    await db.delete(
+      "opendays",
+      where: "id = ? AND day = ?",
+      whereArgs: [id], // you need the id
+    );
   }
 
   Future<void> updateOpened({required String id, required int day}) async {
@@ -60,7 +80,7 @@ class DatabaseHandler {
     return queryResult;
   }
 
-  Future<List<Map<String, Object?>>> getOpenedEntries(String id) async {
+  Future<List<Map<String, Object?>>> getOpenededEntries(String id) async {
     final db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db
         .query("opendays", where: "id = ? and open = ?", whereArgs: [id, 1]);
@@ -73,10 +93,8 @@ class DatabaseHandler {
     return queryResult.map((e) => CalendarModel.fromMap(e)).toList();
   }
 
-  Future<void> deleteDB() async {
-    String path = await getDatabasesPath();
-    print("deleting");
-    await deleteDatabase(join(path, 'example.db'));
-    print("finish3ed delete");
-  }
+  // Future<void> deleteDB() async {
+  //   String path = await getDatabasesPath();
+  //   await deleteDatabase(join(path, 'example.db'));
+  // }
 }

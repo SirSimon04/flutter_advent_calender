@@ -53,9 +53,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   //Get calendar by id from Server and save to local db
                   CalendarModel c = await httpHelper
                       .getCalendarFromServer(_textFieldController.text.trim());
-                  print("before inserting");
                   await databaseHandler.insertCalendar(c);
-                  print("after inserting");
                   //Update showing calendars
                   setState(() {
                     _futureCalList = getCalList();
@@ -115,8 +113,9 @@ class _OwnCalendarsState extends State<OwnCalendars>
       },
     );
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _futureCalList = getCalList();
   }
@@ -129,7 +128,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
     if (now.isBefore(DateTime.utc(2021, 12))) {
       return -1;
     } else {
-      List openedDoors = await databaseHandler.getOpenedEntries(id);
+      List openedDoors = await databaseHandler.getOpenededEntries(id);
       return now.day - openedDoors.length;
     }
   }
@@ -146,8 +145,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -14,4 +14,12 @@ class FileService {
 
     await file.writeAsBytes(response.bodyBytes);
   }
+
+  Future<void> deleteImageFromName(String name) async {
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+
+    File file = File(join(documentDirectory.path, name));
+
+    await file.delete();
+  }
 }
