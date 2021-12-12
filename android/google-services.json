@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "67383409391",
+    "project_id": "calendar-e9996",
+    "storage_bucket": "calendar-e9996.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67383409391:android:771b5c2e1eb9f4c0ce791a",
+        "android_client_info": {
+          "package_name": "com.simonengel.advent4you"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67383409391-2gsdriosr91vahp8a1gbc2v05us6k003.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXEY8yfIVGRSIRONiLMO2jdjGYqvtLxnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67383409391-2gsdriosr91vahp8a1gbc2v05us6k003.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

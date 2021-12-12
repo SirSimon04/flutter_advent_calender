@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>67383409391-2cn600u0e63ckfr93dftrsj10vic0lge.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.67383409391-2cn600u0e63ckfr93dftrsj10vic0lge</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD3TVsbfz91oTTH-Bt8TZApCbI7yMWQVSw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>67383409391</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.simonengel.advent4you</string>
+	<key>PROJECT_ID</key>
+	<string>calendar-e9996</string>
+	<key>STORAGE_BUCKET</key>
+	<string>calendar-e9996.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:67383409391:ios:e2cb5f9c4b557907ce791a</string>
+</dict>
+</plist>
