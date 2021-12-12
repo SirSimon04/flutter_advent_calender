@@ -55,7 +55,11 @@ class _CalendarViewState extends State<CalendarView> {
                         await deleteCalendar();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
-                        ComeBackFromCalendarView().dispatch(context);
+                        Navigator.of(context).pushReplacement(
+                          CupertinoPageRoute(
+                            builder: (context) => const MyApp(),
+                          ),
+                        );
                       },
                       child: const Text('Löschen'),
                     )
