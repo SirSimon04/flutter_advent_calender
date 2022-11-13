@@ -6,10 +6,10 @@ import 'http.dart' as local_http;
 
 class FileService {
   Future<void> saveImageFromName(String name) async {
-    final response = await http
-        .get(Uri.parse("http://synologynas-simon.ddns.net:5555/image/" + name));
+    final response =
+        await http.get(Uri.parse("http://192.168.178.20:6666/image/" + name));
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-
+    print(response);
     File file = File(join(documentDirectory.path, name));
 
     await file.writeAsBytes(response.bodyBytes);

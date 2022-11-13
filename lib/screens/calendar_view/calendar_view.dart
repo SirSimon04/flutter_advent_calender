@@ -148,6 +148,7 @@ class _CalendarViewState extends State<CalendarView> {
             future: _futureOpenList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                print(snapshot.data);
                 return InteractiveViewer(
                   maxScale: 60,
                   child: Stack(
@@ -168,7 +169,8 @@ class _CalendarViewState extends State<CalendarView> {
                             doorSize: const Size(17, 25),
                             isLast: i == 23,
                             calendar: widget.calendar,
-                            isDoorOpen: snapshot.data![i]["open"] == 1,
+                            // isDoorOpen: snapshot.data![i]["open"] == 1,
+                            isDoorOpen: false,
                           ),
                         ),
                     ],

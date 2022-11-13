@@ -8,7 +8,7 @@ class NotFoundException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  final String ngrokUrl = "http://synologynas-simon.ddns.net:5555";
+  final String ngrokUrl = "http://192.168.178.20:6666";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
     final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
@@ -46,6 +46,15 @@ class HttpHelper {
         "doorId": doorId
       }),
     );
+    print(jsonEncode(<String, dynamic>{
+      'id': newCalId,
+      "title": title,
+      "msg": msg,
+      "from": "VON DICH",
+      "to": "FÜR MICH",
+      "bgId": bgId,
+      "doorId": doorId
+    }));
 
     return newCalId;
   }

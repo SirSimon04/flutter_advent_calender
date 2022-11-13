@@ -151,8 +151,11 @@ class _CreateCalendarState extends State<CreateCalendar>
                         );
                         if (pickedFile != null) {
                           setState(() {
-                            images[index] = File(pickedFile.path);
+                            for (int i = 0; i < 24; i++) {
+                              images[i] = File(pickedFile.path);
+                            }
                           });
+                          print(images);
                         }
                       },
                       child: Container(
@@ -371,10 +374,13 @@ class _CreateCalendarState extends State<CreateCalendar>
                                 bgId: selectedBg.indexOf(true),
                                 doorId: selectedDoors.indexOf(true),
                               );
+                              print(
+                                  "uploaded calendar successfully " + newCalId);
                               await http.uploadImages(
                                 images: images,
                                 newCalId: newCalId,
                               );
+                              print("uploaded images");
                               _msgController.clear();
                               _titleController.clear();
                               List<File?> newImages = [];
