@@ -163,12 +163,13 @@ class _CreateCalendarState extends State<CreateCalendar>
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          // ignore: deprecated_member_use
-                          PickedFile? pickedFile = await ImagePicker().getImage(
-                            source: ImageSource.gallery,
-                            maxWidth: 1800,
-                            maxHeight: 1800,
-                          );
+                          XFile? pickedFile = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          // PickedFile? pickedFile = await ImagePicker().getImage(
+                          //   source: ImageSource.gallery,
+                          //   maxWidth: 1800,
+                          //   maxHeight: 1800,
+                          // );
                           if (pickedFile != null) {
                             setState(() {
                               for (int i = 0; i < 24; i++) {
@@ -373,102 +374,106 @@ class _CreateCalendarState extends State<CreateCalendar>
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(30.0),
-                      color: Theme.of(context).primaryColor,
-                      child: MaterialButton(
-                        onPressed: (_titleController.text.trim().isEmpty ||
-                                _msgController.text.trim().isEmpty ||
-                                images.contains(null))
-                            ? () {
-                                ToastService.showLongToast(
-                                    "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
-                              }
-                            : () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                HttpHelper http = HttpHelper();
-                                newCalId = await http.uploadCalendar(
-                                  msg: _msgController.text.trim(),
-                                  title: _titleController.text.trim(),
-                                  bgId: selectedBg.indexOf(true),
-                                  doorId: selectedDoors.indexOf(true),
-                                );
-                                print("uploaded calendar successfully " +
-                                    newCalId);
-                                await http.uploadImages(
-                                  images: images,
-                                  newCalId: newCalId,
-                                );
-                                print("uploaded images");
-                                _msgController.clear();
-                                _titleController.clear();
-                                List<File?> newImages = [];
-                                for (int i = 0; i < 24; i++) {
-                                  newImages.add(null);
-                                }
-                                setState(() {
-                                  images = newImages;
-                                  _isLoading = false;
-                                });
-                                _scrollController.jumpTo(0);
-                                showDialog(
-                                  builder: (context) => AlertDialog(
-                                    title: const Text(
-                                        "Dein Kalender wurde erfolgreich erstellt"),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Text(
-                                          "Schicke diese Id an deine Freunde",
-                                          textAlign: TextAlign.center,
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoButton.filled(
+                            child: const Text("Kalender erstellen"),
+                            onPressed: (_titleController.text.trim().isEmpty ||
+                                    _msgController.text.trim().isEmpty ||
+                                    images.contains(null))
+                                ? () {
+                                    ToastService.showLongToast(
+                                        "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
+                                  }
+                                : () async {
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+                                    HttpHelper http = HttpHelper();
+                                    newCalId = await http.uploadCalendar(
+                                      msg: _msgController.text.trim(),
+                                      title: _titleController.text.trim(),
+                                      bgId: selectedBg.indexOf(true),
+                                      doorId: selectedDoors.indexOf(true),
+                                    );
+                                    print("uploaded calendar successfully " +
+                                        newCalId);
+                                    await http.uploadImages(
+                                      images: images,
+                                      newCalId: newCalId,
+                                    );
+                                    print("uploaded images");
+                                    _msgController.clear();
+                                    _titleController.clear();
+                                    List<File?> newImages = [];
+                                    for (int i = 0; i < 24; i++) {
+                                      newImages.add(null);
+                                    }
+                                    setState(() {
+                                      images = newImages;
+                                      _isLoading = false;
+                                    });
+                                    _scrollController.jumpTo(0);
+                                    showCupertinoDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          CupertinoAlertDialog(
+                                        title: const Text(
+                                            "Dein Kalender wurde erfolgreich erstellt"),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text(
+                                              "Schicke diese Id an deine Freunde",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12.0),
+                                              child: Text(
+                                                newCalId,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12.0),
-                                          child: Text(
-                                            newCalId,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Center(
-                                          child: IconButton(
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: const Text("ID kopieren"),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                               FlutterClipboard.copy(newCalId)
-                                                  .then((value) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                        "Erfolgreich kopiert!"),
-                                                  ),
-                                                );
-                                              });
+                                                  .then(
+                                                (value) {
+                                                  ToastService.showLongToast(
+                                                      "Id erfolgreich kopiert");
+                                                },
+                                              );
                                             },
-                                            icon: const Icon(Icons.copy),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  context: context,
-                                );
-                              },
-                        minWidth: MediaQuery.of(context).size.width * 0.6,
-                        height: MediaQuery.of(context).size.height * 0.07,
-                        child: const Text(
-                          "Kalender erstellen",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                          )
+                        : Material(
+                            elevation: 5.0,
+                            borderRadius: BorderRadius.circular(30.0),
+                            color: Theme.of(context).primaryColor,
+                            child: MaterialButton(
+                              onPressed: () => onCreateButtonPressed(context),
+                              minWidth: MediaQuery.of(context).size.width * 0.6,
+                              height: MediaQuery.of(context).size.height * 0.07,
+                              child: const Text(
+                                "Kalender erstellen",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -516,4 +521,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     null,
     null,
   ];
+
+  onCreateButtonPressed(BuildContext context) {
+    print("Moin");
+  }
 }
