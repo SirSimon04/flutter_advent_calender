@@ -31,86 +31,108 @@ class _OwnCalendarsState extends State<OwnCalendars>
   DatabaseHandler databaseHandler = DatabaseHandler();
   FileService fileService = FileService();
 
+  onAddButtonPressed(BuildContext context) async {
+    Navigator.of(context).pop();
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      //Get calendar by id from Server and save to local db
+      CalendarModel c = await httpHelper
+          .getCalendarFromServer(_textFieldController.text.trim());
+      await databaseHandler.insertCalendar(c);
+      //Update showing calendars
+      setState(() {
+        _futureCalList = getCalList();
+      });
+
+      //Saving every image on local storage
+      for (int i = 0; i < 24; i++) {
+        await fileService.saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+      }
+
+      //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
+      for (int i = 0; i < 24; i++) {
+        await databaseHandler.insertOpened(id: c.id, day: i);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } on NotFoundException catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ToastService.showLongToast(
+          "Der Kalender mit der eingegeben Id wurde nicht gefunden");
+    } on DatabaseException catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (e.isUniqueConstraintError()) {
+        ToastService.showLongToast("Diser Kalender wurde schon hinzugefügt");
+      } else {
+        ToastService.showLongToast(
+            "Beim Laden des Kalenders ist ein Fehler aufgetreten");
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+      ToastService.showLongToast(
+          "Beim Laden des Kalenders ist ein Fehler aufgetreten");
+    }
+    _textFieldController.text = "";
+  }
+
   showAddAlert(context) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Kalender hinzufügen'),
-          content: TextField(
-            onChanged: (value) {},
-            controller: _textFieldController,
-            decoration: const InputDecoration(hintText: "Kalender-Code"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                try {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  //Get calendar by id from Server and save to local db
-                  CalendarModel c = await httpHelper
-                      .getCalendarFromServer(_textFieldController.text.trim());
-                  await databaseHandler.insertCalendar(c);
-                  //Update showing calendars
-                  setState(() {
-                    _futureCalList = getCalList();
-                  });
-
-                  //Saving every image on local storage
-                  for (int i = 0; i < 24; i++) {
-                    await fileService
-                        .saveImageFromName(c.id + "_" + i.toString() + ".jpg");
-                  }
-
-                  //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
-                  for (int i = 0; i < 24; i++) {
-                    await databaseHandler.insertOpened(id: c.id, day: i);
-                  }
-                  setState(() {
-                    _isLoading = false;
-                  });
-                } on NotFoundException catch (e) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  ToastService.showLongToast(
-                      "Der Kalender mit der eingegeben Id wurde nicht gefunden");
-                } on DatabaseException catch (e) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  if (e.isUniqueConstraintError()) {
-                    ToastService.showLongToast(
-                        "Diser Kalender wurde schon hinzugefügt");
-                  } else {
-                    ToastService.showLongToast(
-                        "Beim Laden des Kalenders ist ein Fehler aufgetreten");
-                  }
-                } catch (e) {
-                  print(e);
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  ToastService.showLongToast(
-                      "Beim Laden des Kalenders ist ein Fehler aufgetreten");
-                }
-              },
-              child: const Text(
-                "Hinzufügen",
-                style: TextStyle(
-                  color: Colors.white,
+      builder: (context) => Theme.of(context).platform == TargetPlatform.iOS
+          ? CupertinoAlertDialog(
+              title: const Text('Kalendar hinzufügen'),
+              content: Padding(
+                padding: const EdgeInsets.only(top: 18),
+                child: CupertinoTextField(
+                  controller: _textFieldController,
+                  placeholder: "Kalender Code",
+                  style: const TextStyle(color: Colors.white),
+                  autofocus: true,
                 ),
               ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text("Abbrechen"),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                CupertinoDialogAction(
+                  child: const Text("Hinzufügen"),
+                  onPressed: () => onAddButtonPressed(context),
+                ),
+              ],
+            )
+          : AlertDialog(
+              title: const Text('Kalender hinzufügen'),
+              content: TextField(
+                onChanged: (value) {},
+                controller: _textFieldController,
+                decoration: const InputDecoration(hintText: "Kalender-Code"),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () => onAddButtonPressed(context),
+                  child: const Text(
+                    "Hinzufügen",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  ),
+                ),
+              ],
             ),
-          ],
-        );
-      },
     );
   }
 
