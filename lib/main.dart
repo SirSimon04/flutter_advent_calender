@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_advent_calender/screens/create_calendar/create_calendar.dart';
 import 'package:flutter_advent_calender/screens/own_calendars/own_calendars.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const App()
-  );
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -16,11 +16,25 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
+    return PlatformApp(
+      title: "you2Me",
+      material: (_, __) => MaterialAppData(
+        theme: ThemeData.dark().copyWith(),
+      ),
+      cupertino: (_, __) => CupertinoAppData(
+        theme: const CupertinoThemeData(
+          brightness: Brightness.dark,
+          textTheme: CupertinoTextThemeData(),
+        ),
+      ),
+      home: const MyApp(),
       debugShowCheckedModeBanner: false,
-      home: MyApp(),
     );
+    // return MaterialApp(
+    //   theme: ThemeData.dark(),
+    //   debugShowCheckedModeBanner: false,
+    //   home: MyApp(),
+    // );
   }
 }
 
@@ -41,25 +55,42 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
+    return PlatformScaffold(
+      bottomNavBar: PlatformNavBar(
+        currentIndex: _selectedIndex,
+        itemChanged: _onItemTapped,
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_view_month_outlined,
-            ),
-            label: "Meine Kalender",
+            icon: Icon(context.platformIcons.book),
+            label: "Kalender",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_rounded),
-            label: "Kalender erstellen",
+            icon: Icon(context.platformIcons.addCircledSolid),
+            label: "Personen",
           ),
         ],
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
       ),
       body: _pages[_selectedIndex],
     );
+    // return Scaffold(
+    //   bottomNavigationBar: BottomNavigationBar(
+    //     items: const [
+    //       BottomNavigationBarItem(
+    //         icon: Icon(
+    //           Icons.calendar_view_month_outlined,
+    //         ),
+    //         label: "Meine Kalender",
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.add_box_rounded),
+    //         label: "Kalender erstellen",
+    //       ),
+    //     ],
+    //     onTap: _onItemTapped,
+    //     currentIndex: _selectedIndex,
+    //   ),
+    //   body: _pages[_selectedIndex],
+    // );
   }
 
   void _onItemTapped(int index) {

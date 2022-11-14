@@ -7,6 +7,7 @@ import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:flutter_advent_calender/services/toast_service.dart';
 import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:provider/provider.dart';
 
@@ -86,10 +87,10 @@ class _OwnCalendarsState extends State<OwnCalendars>
   }
 
   showAddAlert(context) {
-    showDialog(
-      context: context,
-      builder: (context) => Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoAlertDialog(
+    Theme.of(context).platform == TargetPlatform.iOS
+        ? showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
               title: const Text('Kalendar hinzufügen'),
               content: Padding(
                 padding: const EdgeInsets.only(top: 18),
@@ -110,8 +111,11 @@ class _OwnCalendarsState extends State<OwnCalendars>
                   onPressed: () => onAddButtonPressed(context),
                 ),
               ],
-            )
-          : AlertDialog(
+            ),
+          )
+        : showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
               title: const Text('Kalender hinzufügen'),
               content: TextField(
                 onChanged: (value) {},
@@ -133,7 +137,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                 ),
               ],
             ),
-    );
+          );
   }
 
   @override
@@ -171,35 +175,83 @@ class _OwnCalendarsState extends State<OwnCalendars>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Meine Kalender",
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_box_rounded),
-            onPressed: () {
-              showAddAlert(context);
-            },
-          )
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: const Text("Memories"),
+        automaticallyImplyLeading: false,
+        trailingActions: [
+          GestureDetector(
+            onTap: () => showAddAlert(context),
+            child: Icon(
+              context.platformIcons.add,
+            ),
+          ),
         ],
       ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Meine Kalender",
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.add_box_rounded),
+      //       onPressed: () {
+      //         showAddAlert(context);
+      //       },
+      //     )
+      //   ],
+      // ),
       body: NotificationListener<ComeBackFromCalendarView>(
         onNotification: (val) {
           setState(() {});
           return true;
         },
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: FutureBuilder<List<CalendarModel>>(
-                  future: _futureCalList,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.isEmpty) {
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: FutureBuilder<List<CalendarModel>>(
+                    future: _futureCalList,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus oben rechts hinzufügen.",
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }
+                        return GridView.builder(
+                          itemCount: snapshot.data?.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                          itemBuilder: (context, index) {
+                            return FutureBuilder<int>(
+                                future: calculateDoorsToOpen(
+                                    snapshot.data![index].id),
+                                builder: (context2, snapshot2) {
+                                  if (snapshot.hasData) {
+                                    return CalendarTile(
+                                      calendar: snapshot.data?[index],
+                                      doorsToOpen: snapshot2.data ?? 0,
+                                    );
+                                  } else {
+                                    return CalendarTile(
+                                      calendar: snapshot.data?[index],
+                                      doorsToOpen: 0,
+                                    );
+                                  }
+                                });
+                          },
+                        );
+                      } else {
                         return const Center(
                           child: Text(
                             "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus oben rechts hinzufügen.",
@@ -207,52 +259,18 @@ class _OwnCalendarsState extends State<OwnCalendars>
                           ),
                         );
                       }
-                      return GridView.builder(
-                        itemCount: snapshot.data?.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                        itemBuilder: (context, index) {
-                          return FutureBuilder<int>(
-                              future: calculateDoorsToOpen(
-                                  snapshot.data![index].id),
-                              builder: (context2, snapshot2) {
-                                if (snapshot.hasData) {
-                                  return CalendarTile(
-                                    calendar: snapshot.data?[index],
-                                    doorsToOpen: snapshot2.data ?? 0,
-                                  );
-                                } else {
-                                  return CalendarTile(
-                                    calendar: snapshot.data?[index],
-                                    doorsToOpen: 0,
-                                  );
-                                }
-                              });
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: Text(
-                          "Du hast noch keine Kalender gespeichert. Du kannst einen Kalender mit dem Plus oben rechts hinzufügen.",
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    }
-                  }),
-            ),
-            Container(
-              child: _isLoading
-                  ? const Loader(
-                      loadingTxt:
-                          "Dein Kalender wird geladen, Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder heruntergeladen werden. Bitte verbleibe dabei in dieser Ansicht.",
-                    )
-                  : Container(),
-            ),
-          ],
+                    }),
+              ),
+              Container(
+                child: _isLoading
+                    ? const Loader(
+                        loadingTxt:
+                            "Dein Kalender wird geladen, Dieser Vorgang kann einige Zeit in Anspruch nehmen, da alle Bilder heruntergeladen werden. Bitte verbleibe dabei in dieser Ansicht.",
+                      )
+                    : Container(),
+              ),
+            ],
+          ),
         ),
       ),
     );

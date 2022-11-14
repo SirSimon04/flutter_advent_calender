@@ -7,6 +7,7 @@ import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:flutter_advent_calender/widgets/calendar_door.dart';
 import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
 
 class CalendarView extends StatefulWidget {
@@ -38,34 +39,37 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   void showDeleteDialog() {
-    showDialog(
-        context: context,
-        builder: Platform.isIOS
-            ? (context) => CupertinoAlertDialog(
-                  title: const Text('Wirklich löschen?'),
-                  content: const Text("Diese AKtion ist nicht zu widerrufen"),
-                  actions: <Widget>[
-                    CupertinoDialogAction(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Schließen')),
-                    CupertinoDialogAction(
-                      onPressed: () async {
-                        await deleteCalendar();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushReplacement(
-                          CupertinoPageRoute(
-                            builder: (context) => const MyApp(),
-                          ),
-                        );
-                      },
-                      child: const Text('Löschen'),
-                    )
-                  ],
+    Platform.isIOS
+        ? showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: const Text('Wirklich löschen?'),
+              content: const Text("Diese AKtion ist nicht zu widerrufen"),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Schließen')),
+                CupertinoDialogAction(
+                  onPressed: () async {
+                    await deleteCalendar();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(
+                        builder: (context) => const MyApp(),
+                      ),
+                    );
+                  },
+                  child: const Text('Löschen'),
                 )
-            : (context) => AlertDialog(
+              ],
+            ),
+          )
+        : showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
                   title: const Text('Wirklich löschen?'),
                   content: const Text("Diese AKtion ist nicht zu widerrufen"),
                   actions: <Widget>[
@@ -135,14 +139,23 @@ class _CalendarViewState extends State<CalendarView> {
   @override
   Widget build(BuildContext context) {
     List<List<double>> posList = calculatePositions(context);
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(widget.calendar.title),
-        actions: [
-          IconButton(
-              onPressed: showDeleteDialog, icon: const Icon(Icons.delete))
+        trailingActions: [
+          GestureDetector(
+            onTap: showDeleteDialog,
+            child: Icon(context.platformIcons.delete),
+          )
         ],
       ),
+      // appBar: AppBar(
+      //   title: Text(widget.calendar.title),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: showDeleteDialog, icon: const Icon(Icons.delete))
+      //   ],
+      // ),
       body: Center(
         child: FutureBuilder<List<Map<String, dynamic>>>(
             future: _futureOpenList,

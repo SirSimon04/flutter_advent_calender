@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,25 +31,37 @@ class _ImageFullscreenState extends State<ImageFullscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-            onPressed: saveImage,
-            icon: const Icon(Icons.file_download),
-          )
-        ],
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(
           "Foto vom ${widget.day}. 12.",
-          style: const TextStyle(color: Colors.white),
         ),
+        trailingActions: [
+          GestureDetector(
+            onTap: saveImage,
+            child: Icon(context.platformIcons.folderSolid),
+          )
+        ],
       ),
+
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     color: Colors.white,
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       onPressed: saveImage,
+      //       icon: const Icon(Icons.file_download),
+      //     )
+      //   ],
+      //   title: Text(
+      //     "Foto vom ${widget.day}. 12.",
+      //     style: const TextStyle(color: Colors.white),
+      //   ),
+      // ),
       body: Center(
         child: ListView(
           shrinkWrap: true,
