@@ -8,7 +8,7 @@ class NotFoundException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  final String ngrokUrl = "http://192.168.178.20:6666";
+  final String ngrokUrl = "https://advent4you.you2me.app";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
     final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
