@@ -147,22 +147,23 @@ class _CalendarViewState extends State<CalendarView> {
                 maxScale: 60,
                 child: Stack(
                   children: [
-                    // Container(
-                    //   constraints: BoxConstraints.expand(),
-                    //   decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //       image: AssetImage(
-                    //           // "assets/background_${widget.calendar.bgId}.jpg"),
-                    //           "assets/background_${widget.calendar.bgId}.jpg"),
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-                    // ),
+                    Container(
+                      constraints: BoxConstraints.expand(),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              // "assets/background_${widget.calendar.bgId}.jpg"),
+                              "assets/background_3.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 6, childAspectRatio: 0.5),
                         itemCount: 24,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return CalendarDoor(
                             iterator: index,
