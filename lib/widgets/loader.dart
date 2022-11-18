@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class Loader extends StatelessWidget {
   const Loader(
@@ -25,7 +26,7 @@ class Loader extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.only(top: 10),
-          child: const CircularProgressIndicator(),
+          child: PlatformCircularProgressIndicator(),
         ),
         Center(
           child: Padding(
