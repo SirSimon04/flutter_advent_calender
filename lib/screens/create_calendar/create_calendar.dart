@@ -25,10 +25,7 @@ class _CreateCalendarState extends State<CreateCalendar>
 
   bool _isLoading = false;
 
-  List<bool> selectedBg = [
-    true,
-    false,
-  ];
+  int selectedBgIndex = 0;
 
   List<bool> selectedDoors = [
     true,
@@ -56,7 +53,7 @@ class _CreateCalendarState extends State<CreateCalendar>
     super.build(context);
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text("Erstelle einen neuen Kalendar"),
+        title: const Text("Erstelle einen neuen Kalendar"),
       ),
       // appBar: AppBar(
       //   title: const Text(
@@ -243,25 +240,17 @@ class _CreateCalendarState extends State<CreateCalendar>
                       mainAxisSpacing: 20,
                     ),
                     shrinkWrap: true,
-                    itemCount: 2,
+                    itemCount: 4,
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          List<bool> newList = [];
-                          for (int i = 0; i < 2; i++) {
-                            if (i == index) {
-                              newList.add(true);
-                            } else {
-                              newList.add(false);
-                            }
-                          }
                           setState(() {
-                            selectedBg = newList;
+                            selectedBgIndex = index;
                           });
                         },
                         child: Opacity(
-                          opacity: selectedBg[index] ? 1 : 0.5,
+                          opacity: selectedBgIndex == index ? 1 : 0.5,
                           child: Container(
                             alignment: Alignment.center,
                             child: Padding(
@@ -392,7 +381,7 @@ class _CreateCalendarState extends State<CreateCalendar>
                                     newCalId = await http.uploadCalendar(
                                       msg: _msgController.text.trim(),
                                       title: _titleController.text.trim(),
-                                      bgId: selectedBg.indexOf(true),
+                                      bgId: selectedBgIndex,
                                       doorId: selectedDoors.indexOf(true),
                                     );
                                     print("uploaded calendar successfully " +

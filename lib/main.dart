@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
           ),
           BottomNavigationBarItem(
             icon: Icon(context.platformIcons.addCircledSolid),
-            label: "Personen",
+            label: "Erstellen",
           ),
         ],
       ),
