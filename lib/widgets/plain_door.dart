@@ -116,7 +116,7 @@ class _PlainDoorState extends State<PlainDoor>
               child: Center(
                 child: Text(
                   widget.day ?? "",
-                  style: const TextStyle(color: Colors.white, fontSize: 4.8),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             )
@@ -153,7 +153,7 @@ class _PlainDoorState extends State<PlainDoor>
               child: Center(
                 child: Text(
                   widget.day ?? "",
-                  style: const TextStyle(color: Colors.white, fontSize: 4.8),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             ),

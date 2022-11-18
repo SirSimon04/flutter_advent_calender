@@ -168,7 +168,7 @@ class _CalendarViewState extends State<CalendarView> {
                             iterator: index,
                             imgSrc: "assets/door_${widget.calendar.doorId}.png",
                             day: "${index + 1}",
-                            doorSize: const Size(17, 25),
+                            doorSize: const Size(34, 50),
                             isLast: index == 23,
                             calendar: widget.calendar,
                             // isDoorOpen: snapshot.data![i]["open"] == 1,
