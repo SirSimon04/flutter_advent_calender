@@ -106,27 +106,17 @@ class _CalendarViewState extends State<CalendarView> {
     double heightOne = 0;
 
     double widthOne = width / 9;
-    if (widget.calendar.bgId == 0) {
-      heightOne = height /
-          4 *
-          0.3333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
-    } else {
-      heightOne = height / 4 * 0.2222;
-    }
-    print("before for");
+    heightOne = height /
+        4 *
+        0.33333; // First number is because of 3 rows, so 4 spaces, second number is about how much percent of the screen the door rows will be showed
     for (int i = 0; i < 24; i++) {
       rightList.add((widthOne * ((i % 8) + 1)));
     }
 
     for (int i = 0; i < 24; i++) {
-      if (widget.calendar.bgId == 1) {
-        bottomList.add((heightOne * ((i % 3))) + height * 0.5);
-      } else if (widget.calendar.bgId == 0) {
-        bottomList.add((heightOne * ((i % 3))) + height * 0.35);
-      }
+      bottomList.add((heightOne * ((i % 3))) + height * 0.2);
     }
 
-    print("finished calculate");
     return [bottomList, rightList];
   }
 
@@ -149,81 +139,66 @@ class _CalendarViewState extends State<CalendarView> {
           )
         ],
       ),
-      // appBar: AppBar(
-      //   title: Text(widget.calendar.title),
-      //   actions: [
-      //     IconButton(
-      //         onPressed: showDeleteDialog, icon: const Icon(Icons.delete))
-      //   ],
-      // ),
-      body: Center(
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-            future: _futureOpenList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                print(snapshot.data);
-                return InteractiveViewer(
-                  maxScale: 60,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Image.asset(
-                          "assets/background_${widget.calendar.bgId}.jpg",
-                        ),
-                      ),
-                      for (int i = 0; i < 24; i++)
-                        Positioned(
-                          top: posList[0][i].toDouble(),
-                          right: posList[1][i].toDouble(),
-                          child: CalendarDoor(
-                            iterator: i,
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+          future: _futureOpenList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return InteractiveViewer(
+                maxScale: 60,
+                child: Stack(
+                  children: [
+                    // Container(
+                    //   constraints: BoxConstraints.expand(),
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       image: AssetImage(
+                    //           // "assets/background_${widget.calendar.bgId}.jpg"),
+                    //           "assets/background_${widget.calendar.bgId}.jpg"),
+                    //       fit: BoxFit.cover,
+                    //     ),
+                    //   ),
+                    // ),
+                    GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 6, childAspectRatio: 0.5),
+                        itemCount: 24,
+                        itemBuilder: (context, index) {
+                          return CalendarDoor(
+                            iterator: index,
                             imgSrc: "assets/door_${widget.calendar.doorId}.png",
-                            day: "${i + 1}",
+                            day: "${index + 1}",
                             doorSize: const Size(17, 25),
-                            isLast: i == 23,
+                            isLast: index == 23,
                             calendar: widget.calendar,
                             // isDoorOpen: snapshot.data![i]["open"] == 1,
                             isDoorOpen: false,
-                          ),
-                        ),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }),
-      ),
+                          );
+                        })
+                    // for (int i = 0; i < 24; i++)
+                    //   Positioned(
+                    //     top: posList[0][i].toDouble(),
+                    //     right: posList[1][i].toDouble(),
+                    //     child: CalendarDoor(
+                    //       iterator: i,
+                    //       imgSrc: "assets/door_${widget.calendar.doorId}.png",
+                    //       day: "${i + 1}",
+                    //       doorSize: const Size(17, 25),
+                    //       isLast: i == 23,
+                    //       calendar: widget.calendar,
+                    //       // isDoorOpen: snapshot.data![i]["open"] == 1,
+                    //       isDoorOpen: false,
+                    //     ),
+                    //   ),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
-
-  List<double> bottom = <double>[];
-  List right = [
-    20,
-    70,
-    120,
-    170,
-    220,
-    270,
-    320,
-    370,
-    20,
-    70,
-    120,
-    170,
-    220,
-    270,
-    320,
-    370,
-    20,
-    70,
-    120,
-    170,
-    220,
-    270,
-    320,
-    370,
-  ];
 }
