@@ -174,8 +174,7 @@ class _CalendarViewState extends State<CalendarView> {
                             doorSize: const Size(34, 50),
                             isLast: index == 23,
                             calendar: widget.calendar,
-                            // isDoorOpen: snapshot.data![i]["open"] == 1,
-                            isDoorOpen: false,
+                            isDoorOpen: snapshot.data![index]["open"] == 1,
                           );
                         })
                     // for (int i = 0; i < 24; i++)
