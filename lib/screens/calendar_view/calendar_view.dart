@@ -152,8 +152,8 @@ class _CalendarViewState extends State<CalendarView> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                              // "assets/background_${widget.calendar.bgId}.jpg"),
-                              "assets/background_3.jpg"),
+                            "assets/background_${widget.calendar.bgId}.jpg",
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),

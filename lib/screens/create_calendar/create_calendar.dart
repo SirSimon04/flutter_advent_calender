@@ -27,10 +27,7 @@ class _CreateCalendarState extends State<CreateCalendar>
 
   int selectedBgIndex = 0;
 
-  List<bool> selectedDoors = [
-    true,
-    false,
-  ];
+  int selectedDoorIndex = 0;
 
   @override
   void initState() {
@@ -316,20 +313,12 @@ class _CreateCalendarState extends State<CreateCalendar>
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          List<bool> newList = [];
-                          for (int i = 0; i < 2; i++) {
-                            if (i == index) {
-                              newList.add(true);
-                            } else {
-                              newList.add(false);
-                            }
-                          }
                           setState(() {
-                            selectedDoors = newList;
+                            selectedDoorIndex = index;
                           });
                         },
                         child: Opacity(
-                          opacity: selectedDoors[index] ? 1 : 0.5,
+                          opacity: selectedDoorIndex == index ? 1 : 0.5,
                           child: Container(
                             alignment: Alignment.center,
                             child: Padding(
@@ -382,7 +371,7 @@ class _CreateCalendarState extends State<CreateCalendar>
                                       msg: _msgController.text.trim(),
                                       title: _titleController.text.trim(),
                                       bgId: selectedBgIndex,
-                                      doorId: selectedDoors.indexOf(true),
+                                      doorId: selectedDoorIndex,
                                     );
                                     print("uploaded calendar successfully " +
                                         newCalId);
@@ -435,7 +424,8 @@ class _CreateCalendarState extends State<CreateCalendar>
                                                   .then(
                                                 (value) {
                                                   ToastService.showLongToast(
-                                                      "Id erfolgreich kopiert");
+                                                    "Id erfolgreich kopiert",
+                                                  );
                                                 },
                                               );
                                             },
