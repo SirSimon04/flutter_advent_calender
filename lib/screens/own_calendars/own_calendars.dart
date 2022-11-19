@@ -153,6 +153,8 @@ class _OwnCalendarsState extends State<OwnCalendars>
     DateTime now = DateTime.now();
     if (now.isBefore(DateTime.utc(2022, 12))) {
       return -1;
+    } else if (now.isAfter(DateTime.utc(2022, 12, 24))) {
+      return -2;
     } else {
       List openedDoors = await databaseHandler.getOpenededEntries(id);
       return now.day - openedDoors.length;

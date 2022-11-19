@@ -20,7 +20,9 @@ class CalendarTile extends StatelessWidget {
     if (doorsToOpen == 0) {
       return "Alle geöffnet";
     } else if (doorsToOpen == -1) {
-      return "Bald gehts los";
+      return "Bald geht es los";
+    } else if (doorsToOpen == -2) {
+      return "Dieser Kalender ist vorbei";
     } else {
       return "$doorsToOpen Türchen zu öffnen";
     }
