@@ -159,9 +159,11 @@ class _CalendarViewState extends State<CalendarView> {
                       ),
                     ),
                     GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 6, childAspectRatio: 0.5),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 6,
+                          mainAxisExtent:
+                              MediaQuery.of(context).size.height * 0.2,
+                        ),
                         itemCount: 24,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
