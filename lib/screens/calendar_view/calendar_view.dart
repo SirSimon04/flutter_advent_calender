@@ -44,7 +44,7 @@ class _CalendarViewState extends State<CalendarView> {
             context: context,
             builder: (context) => CupertinoAlertDialog(
               title: const Text('Wirklich löschen?'),
-              content: const Text("Diese AKtion ist nicht zu widerrufen"),
+              content: const Text("Diese Aktion ist nicht zu widerrufen"),
               actions: <Widget>[
                 CupertinoDialogAction(
                     onPressed: () {
@@ -71,7 +71,7 @@ class _CalendarViewState extends State<CalendarView> {
             context: context,
             builder: (context) => AlertDialog(
                   title: const Text('Wirklich löschen?'),
-                  content: const Text("Diese AKtion ist nicht zu widerrufen"),
+                  content: const Text("Diese Aktion ist nicht zu widerrufen"),
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
