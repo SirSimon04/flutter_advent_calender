@@ -149,7 +149,6 @@ class _OwnCalendarsState extends State<OwnCalendars>
   Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
 
   Future<int> calculateDoorsToOpen(String id) async {
-    //TODO: just show the dates after december 1
     DateTime now = DateTime.now();
     if (now.isBefore(DateTime.utc(2022, 12))) {
       return -1;
