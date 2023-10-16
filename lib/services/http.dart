@@ -8,11 +8,12 @@ class NotFoundException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  final String ngrokUrl = "https://advent4you.you2me.app";
+  static String serverBaseUrl = "http://192.168.178.26:3000";
 
   Future<CalendarModel> getCalendarFromServer(String id) async {
-    final response = await http.get(Uri.parse(ngrokUrl + "/calendar/" + id));
-    print(Uri.parse(ngrokUrl + "/calendar/" + id));
+    final response =
+        await http.get(Uri.parse(serverBaseUrl + "/calendar/" + id));
+    print(Uri.parse(serverBaseUrl + "/calendar/" + id));
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 404) {
@@ -31,21 +32,22 @@ class HttpHelper {
     String newCalId =
         sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
-    await http.post(
-      Uri.parse('$ngrokUrl/calendar'),
+    var res = await http.post(
+      Uri.parse('$serverBaseUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
         'id': newCalId,
         "title": title,
-        "msg": msg,
+        "christmasMessage": msg,
         "from": "VON DICH",
         "to": "FÜR MICH",
         "bgId": bgId,
         "doorId": doorId
       }),
     );
+    print(res.body);
     print(jsonEncode(<String, dynamic>{
       'id': newCalId,
       "title": title,
@@ -61,7 +63,9 @@ class HttpHelper {
 
   Future<void> uploadImages(
       {required List<File?> images, required String newCalId}) async {
-    final request = http.MultipartRequest("POST", Uri.parse("$ngrokUrl/image"));
+    print("hey");
+    final request =
+        http.MultipartRequest("POST", Uri.parse("$serverBaseUrl/image"));
 
     final headers = {"Content-type": "multipart/form-data"};
 
@@ -79,6 +83,7 @@ class HttpHelper {
 
     request.headers.addAll(headers);
 
-    await request.send();
+    var res = await request.send();
+    print(res.statusCode);
   }
 }
