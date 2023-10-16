@@ -7,7 +7,7 @@ import 'http.dart' as local_http;
 class FileService {
   Future<void> saveImageFromName(String name) async {
     final response = await http
-        .get(Uri.parse("https://advent4you.you2me.app/image/" + name));
+        .get(Uri.parse(local_http.HttpHelper.serverBaseUrl + "/image/" + name));
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     print(response);
     File file = File(join(documentDirectory.path, name));

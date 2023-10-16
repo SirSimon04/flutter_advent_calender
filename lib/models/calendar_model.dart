@@ -16,7 +16,7 @@ class CalendarModel {
   CalendarModel.fromMap(Map<String, dynamic> res)
       : id = res["id"],
         title = res["title"],
-        msg = res["msg"],
+        msg = res["christmasMessage"],
         bgId = res["bgId"],
         doorId = res["doorId"];
 
@@ -24,7 +24,7 @@ class CalendarModel {
     return {
       "id": id,
       "title": title,
-      "msg": msg,
+      "christmasMessage": msg,
       "doorId": doorId,
       "bgId": bgId
     };
