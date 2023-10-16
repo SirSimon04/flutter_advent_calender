@@ -32,7 +32,7 @@ class HttpHelper {
     String newCalId =
         sha256.convert(utf8.encode(DateTime.now().toString())).toString();
 
-    await http.post(
+    var res = await http.post(
       Uri.parse('$serverBaseUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -40,13 +40,14 @@ class HttpHelper {
       body: jsonEncode(<String, dynamic>{
         'id': newCalId,
         "title": title,
-        "msg": msg,
+        "christmasMessage": msg,
         "from": "VON DICH",
         "to": "FÜR MICH",
         "bgId": bgId,
         "doorId": doorId
       }),
     );
+    print(res.body);
     print(jsonEncode(<String, dynamic>{
       'id': newCalId,
       "title": title,
@@ -62,6 +63,7 @@ class HttpHelper {
 
   Future<void> uploadImages(
       {required List<File?> images, required String newCalId}) async {
+    print("hey");
     final request =
         http.MultipartRequest("POST", Uri.parse("$serverBaseUrl/image"));
 
@@ -81,6 +83,7 @@ class HttpHelper {
 
     request.headers.addAll(headers);
 
-    await request.send();
+    var res = await request.send();
+    print(res.statusCode);
   }
 }

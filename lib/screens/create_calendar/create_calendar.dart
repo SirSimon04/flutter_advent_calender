@@ -166,10 +166,10 @@ class _CreateCalendarState extends State<CreateCalendar>
                           // );
                           if (pickedFile != null) {
                             setState(() {
-                              images[index] = File(pickedFile.path);
-                              // for (int i = 0; i < 24; i++) {
-                              //   images[i] = File(pickedFile.path);
-                              // }
+                              // images[index] = File(pickedFile.path);
+                              for (int i = 0; i < 24; i++) {
+                                images[i] = File(pickedFile.path);
+                              }
                             });
                             print(images);
                           }
