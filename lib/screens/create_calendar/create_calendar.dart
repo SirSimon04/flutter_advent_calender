@@ -8,6 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:clipboard/clipboard.dart';
 
+import '../../models/calendar_model.dart';
+import '../../services/http.dart';
+
 class CreateCalendar extends StatefulWidget {
   const CreateCalendar({Key? key}) : super(key: key);
 
@@ -481,43 +484,48 @@ class _CreateCalendarState extends State<CreateCalendar>
   onCreateButtonPressed(BuildContext context) async {
     if (_titleController.text.trim().isEmpty ||
         _msgController.text.trim().isEmpty ||
-        images.contains(null)) {
+        images.contains(null) ||
+        _nameController.text.isEmpty ||
+        _passwordController.text.trim().isEmpty) {
       ToastService.showLongToast(
           "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
+    } else if (_nameController.text.contains(" ")) {
+      ToastService.showLongToast(
+          "Der Name der Kalenders darf kein Leerzeichen enthalten.");
+    } else if (_passwordController.text.contains(" ")) {
+      ToastService.showLongToast(
+          "Das Passwort darf kein Leerzeichen enthalten.");
     } else {
-      // setState(() {
-      //   _isLoading = true;
-      // });
-      // HttpHelper http = HttpHelper();
-      // CalendarModel newCalendar = CalendarModel(
-      //   id: "id",
-      //   msg: _msgController.text.trim(),
-      //   title: _titleController.text.trim(),
-      //   bgId: selectedBgIndex,
-      //   doorId: selectedDoorIndex,
-      //   name: _nameController.text.trim(),
-      //   password: _passwordController.text.trim(),
-      // );
-      // CalendarModel uploadedCalendar =
-      //     await http.uploadCalendar(newCalendar: newCalendar);
-      // print("uploaded calendar successfully " + uploadedCalendar.toString());
-      // await http.uploadImages(
-      //   images: images,
-      //   calendarModel: uploadedCalendar
-      // );
-      //
-      // _msgController.clear();
-      // _titleController.clear();
-      //
-      // List<File?> newImages = [];
-      // for (int i = 0; i < 24; i++) {
-      //   newImages.add(null);
-      // }
-      // setState(() {
-      //   images = newImages;
-      //   _isLoading = false;
-      // });
-      // _scrollController.jumpTo(0);
+      setState(() {
+        _isLoading = true;
+      });
+      HttpHelper http = HttpHelper();
+      CalendarModel newCalendar = CalendarModel(
+        id: "id",
+        msg: _msgController.text.trim(),
+        title: _titleController.text.trim(),
+        bgId: selectedBgIndex,
+        doorId: selectedDoorIndex,
+        name: _nameController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      CalendarModel uploadedCalendar =
+          await http.uploadCalendar(newCalendar: newCalendar);
+      print("uploaded calendar successfully " + uploadedCalendar.toString());
+      await http.uploadImages(images: images, calendarModel: uploadedCalendar);
+
+      _msgController.clear();
+      _titleController.clear();
+
+      List<File?> newImages = [];
+      for (int i = 0; i < 24; i++) {
+        newImages.add(null);
+      }
+      setState(() {
+        images = newImages;
+        _isLoading = false;
+      });
+      _scrollController.jumpTo(0);
       String dialogString = "";
       dialogString += "Name: " + _nameController.text + "\n";
       dialogString += "Password: " + _passwordController.text;
