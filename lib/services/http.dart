@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 class NotFoundException implements Exception {}
 
@@ -23,59 +22,43 @@ class HttpHelper {
     }
   }
 
-  Future<String> uploadCalendar({
-    required String title,
-    required String msg,
-    required int bgId,
-    required int doorId,
-  }) async {
-    String newCalId =
-        sha256.convert(utf8.encode(DateTime.now().toString())).toString();
-
-    var res = await http.post(
+  Future<CalendarModel> uploadCalendar(
+      {required CalendarModel newCalendar}) async {
+    http.Response res = await http.post(
       Uri.parse('$serverBaseUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, dynamic>{
-        'id': newCalId,
-        "title": title,
-        "christmasMessage": msg,
-        "from": "VON DICH",
-        "to": "FÜR MICH",
-        "bgId": bgId,
-        "doorId": doorId
-      }),
+      body: jsonEncode(newCalendar.toMap()),
     );
     print(res.body);
-    print(jsonEncode(<String, dynamic>{
-      'id': newCalId,
-      "title": title,
-      "msg": msg,
-      "from": "VON DICH",
-      "to": "FÜR MICH",
-      "bgId": bgId,
-      "doorId": doorId
-    }));
 
-    return newCalId;
+    //try catch please
+
+    CalendarModel uploadedCalendar =
+        CalendarModel.fromMap(res.body as Map<String, dynamic>);
+
+    return uploadedCalendar;
   }
 
   Future<void> uploadImages(
-      {required List<File?> images, required String newCalId}) async {
+      {required List<File?> images,
+      required CalendarModel calendarModel}) async {
     print("hey");
-    final request =
-        http.MultipartRequest("POST", Uri.parse("$serverBaseUrl/image"));
+    final request = http.MultipartRequest(
+      "POST",
+      Uri.parse(
+          "$serverBaseUrl/image?password=${calendarModel.password},name=${calendarModel.name}"),
+    );
 
     final headers = {"Content-type": "multipart/form-data"};
-
     for (int i = 0; i < 24; i++) {
       request.files.add(
         http.MultipartFile(
           i.toString(),
           images[i]!.readAsBytes().asStream(),
           images[i]!.lengthSync(),
-          filename: (newCalId + "_" + i.toString() + ".jpg"),
+          filename: (calendarModel.name + "_" + i.toString() + ".jpg"),
           // images[i]!.path.split(".").last),
         ),
       );

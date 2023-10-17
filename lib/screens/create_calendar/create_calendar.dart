@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/toast_service.dart';
 import 'package:flutter_advent_calender/styles.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
@@ -486,33 +485,42 @@ class _CreateCalendarState extends State<CreateCalendar>
       ToastService.showLongToast(
           "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
     } else {
-      setState(() {
-        _isLoading = true;
-      });
-      HttpHelper http = HttpHelper();
-      newCalId = await http.uploadCalendar(
-        msg: _msgController.text.trim(),
-        title: _titleController.text.trim(),
-        bgId: selectedBgIndex,
-        doorId: selectedDoorIndex,
-      );
-      print("uploaded calendar successfully " + newCalId);
-      await http.uploadImages(
-        images: images,
-        newCalId: newCalId,
-      );
-      print("uploaded images");
-      _msgController.clear();
-      _titleController.clear();
-      List<File?> newImages = [];
-      for (int i = 0; i < 24; i++) {
-        newImages.add(null);
-      }
-      setState(() {
-        images = newImages;
-        _isLoading = false;
-      });
-      _scrollController.jumpTo(0);
+      // setState(() {
+      //   _isLoading = true;
+      // });
+      // HttpHelper http = HttpHelper();
+      // CalendarModel newCalendar = CalendarModel(
+      //   id: "id",
+      //   msg: _msgController.text.trim(),
+      //   title: _titleController.text.trim(),
+      //   bgId: selectedBgIndex,
+      //   doorId: selectedDoorIndex,
+      //   name: _nameController.text.trim(),
+      //   password: _passwordController.text.trim(),
+      // );
+      // CalendarModel uploadedCalendar =
+      //     await http.uploadCalendar(newCalendar: newCalendar);
+      // print("uploaded calendar successfully " + uploadedCalendar.toString());
+      // await http.uploadImages(
+      //   images: images,
+      //   calendarModel: uploadedCalendar
+      // );
+      //
+      // _msgController.clear();
+      // _titleController.clear();
+      //
+      // List<File?> newImages = [];
+      // for (int i = 0; i < 24; i++) {
+      //   newImages.add(null);
+      // }
+      // setState(() {
+      //   images = newImages;
+      //   _isLoading = false;
+      // });
+      // _scrollController.jumpTo(0);
+      String dialogString = "";
+      dialogString += "Name: " + _nameController.text + "\n";
+      dialogString += "Password: " + _passwordController.text;
 
       if (Theme.of(context).platform == TargetPlatform.iOS) {
         showCupertinoDialog(
@@ -523,13 +531,13 @@ class _CreateCalendarState extends State<CreateCalendar>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Schicke diese Id an deine Freunde",
+                  "Schicke diese Daten an deine Freunde",
                   textAlign: TextAlign.center,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    newCalId,
+                    dialogString,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -537,13 +545,13 @@ class _CreateCalendarState extends State<CreateCalendar>
             ),
             actions: [
               CupertinoDialogAction(
-                child: const Text("ID kopieren"),
+                child: const Text("Daten kopieren"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  FlutterClipboard.copy(newCalId).then(
+                  FlutterClipboard.copy(dialogString).then(
                     (value) {
                       ToastService.showLongToast(
-                        "Id erfolgreich kopiert",
+                        "Daten erfolgreich kopiert",
                       );
                     },
                   );
@@ -561,13 +569,13 @@ class _CreateCalendarState extends State<CreateCalendar>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Schicke diese Id an deine Freunde",
+                  "Schicke diese Daten an deine Freunde",
                   textAlign: TextAlign.center,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    newCalId,
+                    dialogString,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -578,10 +586,10 @@ class _CreateCalendarState extends State<CreateCalendar>
                 child: const Text("ID kopieren"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  FlutterClipboard.copy(newCalId).then(
+                  FlutterClipboard.copy(dialogString).then(
                     (value) {
                       ToastService.showLongToast(
-                        "Id erfolgreich kopiert",
+                        "Daten erfolgreich kopiert",
                       );
                     },
                   );
