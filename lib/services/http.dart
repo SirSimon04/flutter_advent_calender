@@ -7,6 +7,8 @@ class NotFoundException implements Exception {}
 
 class PasswordWrongException implements Exception {}
 
+class NameAlreadyTakenException implements Exception {}
+
 class HttpHelper {
   HttpHelper();
   static String serverBaseUrl = "http://192.168.178.26:3000";
@@ -40,6 +42,9 @@ class HttpHelper {
       },
       body: jsonEncode(newCalendar.toMap()),
     );
+    if (res.statusCode == 409) {
+      throw NameAlreadyTakenException();
+    }
     print(res.body);
 
     //try catch please

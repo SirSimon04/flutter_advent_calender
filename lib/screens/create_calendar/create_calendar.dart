@@ -508,10 +508,31 @@ class _CreateCalendarState extends State<CreateCalendar>
         name: _nameController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      CalendarModel uploadedCalendar =
-          await http.uploadCalendar(newCalendar: newCalendar);
-      print("uploaded calendar successfully " + uploadedCalendar.toString());
-      await http.uploadImages(images: images, calendarModel: uploadedCalendar);
+      try {
+        CalendarModel uploadedCalendar =
+            await http.uploadCalendar(newCalendar: newCalendar);
+        print("uploaded calendar successfully " + uploadedCalendar.toString());
+        await http.uploadImages(
+            images: images, calendarModel: uploadedCalendar);
+      } on NameAlreadyTakenException {
+        ToastService.showLongToast(
+            "Dieser Name ist bereits vergeben. Bitte wähle einen anderen Namen zur Identifizierung.");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      } on Exception catch (e) {
+        print(e.toString());
+        ToastService.showLongToast("Es ist ein Fehler aufgetreten.");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      String dialogString = "";
+      dialogString += "Name: " + _nameController.text + "\n";
+      dialogString += "Password: " + _passwordController.text;
 
       _msgController.clear();
       _titleController.clear();
@@ -527,9 +548,6 @@ class _CreateCalendarState extends State<CreateCalendar>
         _isLoading = false;
       });
       _scrollController.jumpTo(0);
-      String dialogString = "";
-      dialogString += "Name: " + _nameController.text + "\n";
-      dialogString += "Password: " + _passwordController.text;
 
       if (Theme.of(context).platform == TargetPlatform.iOS) {
         showCupertinoDialog(
