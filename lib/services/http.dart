@@ -9,10 +9,13 @@ class HttpHelper {
   HttpHelper();
   static String serverBaseUrl = "http://192.168.178.26:3000";
 
-  Future<CalendarModel> getCalendarFromServer(String id) async {
-    final response =
-        await http.get(Uri.parse(serverBaseUrl + "/calendar/" + id));
-    print(Uri.parse(serverBaseUrl + "/calendar/" + id));
+  Future<CalendarModel> getCalendarFromServer({
+    required String name,
+    required String password,
+  }) async {
+    final response = await http.get(
+        Uri.parse(serverBaseUrl + "/calendar?name=$name,password=$password"));
+    print(serverBaseUrl + "/calendar?name=$name,password=$password");
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 404) {
@@ -22,8 +25,9 @@ class HttpHelper {
     }
   }
 
-  Future<CalendarModel> uploadCalendar(
-      {required CalendarModel newCalendar}) async {
+  Future<CalendarModel> uploadCalendar({
+    required CalendarModel newCalendar,
+  }) async {
     http.Response res = await http.post(
       Uri.parse('$serverBaseUrl/calendar'),
       headers: <String, String>{
