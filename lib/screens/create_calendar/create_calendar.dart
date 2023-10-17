@@ -20,6 +20,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     with AutomaticKeepAliveClientMixin {
   late TextEditingController _titleController;
   late TextEditingController _msgController;
+  late TextEditingController _nameController;
+  late TextEditingController _passwordController;
   late ScrollController _scrollController;
   late String newCalId;
 
@@ -35,6 +37,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     _titleController = TextEditingController();
     _msgController = TextEditingController();
     _scrollController = ScrollController();
+    _nameController = TextEditingController();
+    _passwordController = TextEditingController();
   }
 
   @override
@@ -43,6 +47,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     _titleController.dispose();
     _msgController.dispose();
     _scrollController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
   }
 
   @override
@@ -52,14 +58,6 @@ class _CreateCalendarState extends State<CreateCalendar>
       appBar: PlatformAppBar(
         title: const Text("Erstelle einen neuen Kalendar"),
       ),
-      // appBar: AppBar(
-      //   title: const Text(
-      //     "Erstelle einen neuen Kalender",
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -68,7 +66,24 @@ class _CreateCalendarState extends State<CreateCalendar>
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 12,
+                    height: 16,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Informationen",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text(
+                    "Setze hier den Titel und die Weihnachts-Nachricht. Der Titel wird in der App angezeigt und die Weihnachtsnachricht wird an Weihcnahten angezeigt.",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -85,18 +100,6 @@ class _CreateCalendarState extends State<CreateCalendar>
                             ),
                             controller: _titleController,
                           ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: const Divider(
-                      thickness: 4,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -122,6 +125,58 @@ class _CreateCalendarState extends State<CreateCalendar>
                     child: const Divider(
                       thickness: 4,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Kalenderzugriff",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text(
+                    "Füge einen Namen und ein Passwort hinzu. Beides kannst du anderen geben, um deinen Kalender herunterzuladen. Der Name ist nicht sichtbar und wird nur zum Hinzufügen benutzt. Nach erfolgreichem Hochladen kannst du Name und Passwort kopieren.",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        ? PlatformTextField(
+                            cupertino: (_, __) => cupertinoTextFieldStyle,
+                            hintText: "Name",
+                            controller: _nameController,
+                          )
+                        : TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Name',
+                            ),
+                            controller: _nameController,
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        ? PlatformTextField(
+                            cupertino: (_, __) => cupertinoTextFieldStyle,
+                            hintText: "Passwort",
+                            controller: _passwordController,
+                          )
+                        : TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Passwort',
+                            ),
+                            controller: _passwordController,
+                          ),
                   ),
                   const SizedBox(
                     height: 16,
