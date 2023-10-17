@@ -63,7 +63,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
 
       //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
       for (int i = 0; i < 24; i++) {
-        await databaseHandler.insertOpened(id: c.id, day: i);
+        await databaseHandler.insertOpened(name: c.name, day: i);
       }
       setState(() {
         _isLoading = false;
@@ -183,14 +183,14 @@ class _OwnCalendarsState extends State<OwnCalendars>
 
   Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
 
-  Future<int> calculateDoorsToOpen(String id) async {
+  Future<int> calculateDoorsToOpen(String name) async {
     DateTime now = DateTime.now();
     if (now.isBefore(DateTime.utc(2022, 12))) {
       return -1;
     } else if (now.isAfter(DateTime.utc(2022, 12, 24))) {
       return -2;
     } else {
-      List openedDoors = await databaseHandler.getOpenededEntries(id);
+      List openedDoors = await databaseHandler.getOpenededEntries(name);
       return now.day - openedDoors.length;
     }
   }
@@ -271,7 +271,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                           itemBuilder: (context, index) {
                             return FutureBuilder<int>(
                                 future: calculateDoorsToOpen(
-                                    snapshot.data![index].id),
+                                    snapshot.data![index].name),
                                 builder: (context2, snapshot2) {
                                   if (snapshot.hasData) {
                                     return CalendarTile(

@@ -36,7 +36,7 @@ class CalendarDoor extends StatefulWidget {
 class _CalendarDoorState extends State<CalendarDoor> {
   //If the particles should be shown
   bool shouldShowParticles = false;
-bool isDoorOpenChange = false;
+  bool isDoorOpenChange = false;
   late String imageUrl;
 
   @override
@@ -64,7 +64,7 @@ bool isDoorOpenChange = false;
                 if (snapshot.hasData) {
                   try {
                     imageUrl =
-                        "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg";
+                        "${snapshot.data!.path}/${widget.calendar.name}_${widget.iterator}.jpg";
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
@@ -82,7 +82,7 @@ bool isDoorOpenChange = false;
                         width: widget.doorSize.width - 2,
                         child: Image.file(
                           File(
-                              "${snapshot.data!.path}/${widget.calendar.id}_${widget.iterator}.jpg"),
+                              "${snapshot.data!.path}/${widget.calendar.name}_${widget.iterator}.jpg"),
                           width: 8,
                           height: 8,
                           // alignment: Alignment.center,

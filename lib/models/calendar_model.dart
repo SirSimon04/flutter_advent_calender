@@ -1,5 +1,4 @@
 class CalendarModel {
-  final String id = "0";
   final String title;
   final String msg;
   final int bgId;
@@ -26,7 +25,17 @@ class CalendarModel {
 
   Map<String, Object?> toMap() {
     return {
-      "id": id,
+      "title": title,
+      "christmasMessage": msg,
+      "doorId": doorId,
+      "bgId": bgId,
+      "name": name,
+      "password": password
+    };
+  }
+
+  Map<String, Object?> toMapWithoutPassword() {
+    return {
       "title": title,
       "christmasMessage": msg,
       "doorId": doorId,

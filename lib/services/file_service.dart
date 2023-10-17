@@ -11,7 +11,7 @@ class FileService {
       required int number}) async {
     final response = await http.get(Uri.parse(
         local_http.HttpHelper.serverBaseUrl +
-            "/image?name=$name,password=$password&number=$number"));
+            "/image?name=$name&password=$password&number=$number"));
 
     if (response.statusCode == 403) {
       throw local_http.PasswordWrongException();
@@ -21,8 +21,9 @@ class FileService {
       throw Exception();
     }
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-    print(response);
-    File file = File(join(documentDirectory.path, name));
+
+    File file = File(
+        join(documentDirectory.path, name + "_" + number.toString() + ".jpg"));
 
     await file.writeAsBytes(response.bodyBytes);
   }
