@@ -5,6 +5,8 @@ import 'dart:convert';
 
 class NotFoundException implements Exception {}
 
+class PasswordWrongException implements Exception {}
+
 class HttpHelper {
   HttpHelper();
   static String serverBaseUrl = "http://192.168.178.26:3000";

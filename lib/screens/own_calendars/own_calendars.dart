@@ -54,7 +54,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
 
       //Saving every image on local storage
       for (int i = 0; i < 24; i++) {
-        await fileService.loadImageFromServerAndLoad(
+        await fileService.loadImageFromServerAndSave(
           name: calendarName,
           password: password,
           number: i,
@@ -68,6 +68,11 @@ class _OwnCalendarsState extends State<OwnCalendars>
       setState(() {
         _isLoading = false;
       });
+    } on PasswordWrongException {
+      setState(() {
+        _isLoading = false;
+      });
+      ToastService.showLongToast("Das eingegeben Passwort ist falsch");
     } on NotFoundException {
       setState(() {
         _isLoading = false;
