@@ -501,7 +501,6 @@ class _CreateCalendarState extends State<CreateCalendar>
       });
       HttpHelper http = HttpHelper();
       CalendarModel newCalendar = CalendarModel(
-        id: "id",
         msg: _msgController.text.trim(),
         title: _titleController.text.trim(),
         bgId: selectedBgIndex,
@@ -516,6 +515,8 @@ class _CreateCalendarState extends State<CreateCalendar>
 
       _msgController.clear();
       _titleController.clear();
+      _nameController.clear();
+      _passwordController.clear();
 
       List<File?> newImages = [];
       for (int i = 0; i < 24; i++) {

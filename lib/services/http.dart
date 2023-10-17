@@ -16,10 +16,13 @@ class HttpHelper {
     required String password,
   }) async {
     final response = await http.get(
-        Uri.parse(serverBaseUrl + "/calendar?name=$name,password=$password"));
-    print(serverBaseUrl + "/calendar?name=$name,password=$password");
+        Uri.parse(serverBaseUrl + "/calendar?name=$name&password=$password"));
+    print(serverBaseUrl + "/calendar?name=$name&password=$password");
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
+    } else if (response.statusCode == 403) {
+      throw PasswordWrongException();
     } else if (response.statusCode == 404) {
       throw NotFoundException();
     } else {
@@ -42,7 +45,8 @@ class HttpHelper {
     //try catch please
 
     CalendarModel uploadedCalendar =
-        CalendarModel.fromMap(res.body as Map<String, dynamic>);
+        CalendarModel.fromMap(jsonDecode(res.body));
+    print(uploadedCalendar);
 
     return uploadedCalendar;
   }
@@ -54,7 +58,7 @@ class HttpHelper {
     final request = http.MultipartRequest(
       "POST",
       Uri.parse(
-          "$serverBaseUrl/image?password=${calendarModel.password},name=${calendarModel.name}"),
+          "$serverBaseUrl/image?password=${calendarModel.password}&name=${calendarModel.name}"),
     );
 
     final headers = {"Content-type": "multipart/form-data"};

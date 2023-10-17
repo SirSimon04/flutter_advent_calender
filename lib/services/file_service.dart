@@ -11,7 +11,8 @@ class FileService {
       required int number}) async {
     final response = await http.get(Uri.parse(
         local_http.HttpHelper.serverBaseUrl +
-            "/image?name=$name,password=$password,number=$number"));
+            "/image?name=$name,password=$password&number=$number"));
+
     if (response.statusCode == 403) {
       throw local_http.PasswordWrongException();
     } else if (response.statusCode == 404) {

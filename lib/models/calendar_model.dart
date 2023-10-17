@@ -1,5 +1,5 @@
 class CalendarModel {
-  final String id;
+  final String id = "0";
   final String title;
   final String msg;
   final int bgId;
@@ -7,18 +7,17 @@ class CalendarModel {
   final String name;
   final String? password;
 
-  CalendarModel(
-      {required this.id,
-      required this.msg,
-      required this.title,
-      required this.bgId,
-      required this.doorId,
-      required this.name,
-      this.password});
+  CalendarModel({
+    required this.msg,
+    required this.title,
+    required this.bgId,
+    required this.doorId,
+    required this.name,
+    this.password,
+  });
 
   CalendarModel.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        title = res["title"],
+      : title = res["title"],
         msg = res["christmasMessage"],
         bgId = res["bgId"],
         doorId = res["doorId"],
@@ -32,8 +31,7 @@ class CalendarModel {
       "christmasMessage": msg,
       "doorId": doorId,
       "bgId": bgId,
-      "name": name,
-      "password": password
+      "name": name
     };
   }
 }

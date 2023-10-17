@@ -78,7 +78,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
         _isLoading = false;
       });
       ToastService.showLongToast(
-          "Der Kalender mit der eingegeben Id wurde nicht gefunden");
+          "Der Kalender mit dem eingegebenen Namen wurde nicht gefunden");
     } on DatabaseException catch (e) {
       setState(() {
         _isLoading = false;
@@ -86,6 +86,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
       if (e.isUniqueConstraintError()) {
         ToastService.showLongToast("Diser Kalender wurde schon hinzugefügt");
       } else {
+        print(e.toString());
         ToastService.showLongToast(
             "Beim Laden des Kalenders ist ein Fehler aufgetreten");
       }
