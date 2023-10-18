@@ -98,7 +98,8 @@ class _OwnCalendarsState extends State<OwnCalendars>
       ToastService.showLongToast(
           "Beim Laden des Kalenders ist ein Fehler aufgetreten");
     }
-    _nameController.text = "";
+    _nameController.clear();
+    _passwordContrller.clear();
   }
 
   showAddAlert(context) {
