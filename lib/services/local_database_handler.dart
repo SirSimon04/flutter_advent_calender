@@ -9,12 +9,12 @@ class DatabaseHandler {
       join(path, 'examplex.db'),
       onCreate: (database, version) async {
         await database.execute(
-            "CREATE TABLE IF NOT EXISTS calendars(id TEXT PRIMARY KEY, title TEXT, christmasMessage TEXT, doorId INTEGER, bgId INTEGER); ");
+            "CREATE TABLE IF NOT EXISTS calendars(title TEXT, christmasMessage TEXT, doorId INTEGER, bgId INTEGER, name TEXT PRIMARY KEY); ");
       },
       version: 1,
     );
     db.execute(
-        "CREATE TABLE IF NOT EXISTS opendays(id TEXT, day INTEGER, open INTEGER);");
+        "CREATE TABLE IF NOT EXISTS opendays(name TEXT, day INTEGER, open INTEGER);");
     return db;
   }
 
@@ -23,68 +23,68 @@ class DatabaseHandler {
 
     await db.insert(
       "calendars",
-      c.toMap(),
+      c.toMapWithoutPassword(),
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
   }
 
-  Future<void> deleteCalendar(String id) async {
+  Future<void> deleteCalendar(String name) async {
     final db = await initializeDB();
     print("in delete");
     await db.delete(
       "calendars",
-      where: "id = ?",
-      whereArgs: [id],
+      where: "name = ?",
+      whereArgs: [name],
     );
     print("after delete");
   }
 
-  Future<void> insertOpened({required String id, required int day}) async {
+  Future<void> insertOpened({required String name, required int day}) async {
     final db = await initializeDB();
 
     await db.insert("opendays", {
-      "id": id,
+      "name": name,
       "day": day,
       "open": 0,
     });
   }
 
-  Future<void> deleteOpened({required String id, required int day}) async {
+  Future<void> deleteOpened({required String name, required int day}) async {
     final db = await initializeDB();
 
     await db.delete(
       "opendays",
-      where: "id = ?",
-      whereArgs: [id], // you need the id
+      where: "name = ?",
+      whereArgs: [name], // you need the id
     );
   }
 
-  Future<void> updateOpened({required String id, required int day}) async {
+  Future<void> updateOpened({required String name, required int day}) async {
     final db = await initializeDB();
 
     await db.update(
       "opendays",
       {
-        "id": id,
+        "name": name,
         "day": day,
         "open": 1,
       },
-      where: "id = ? and day = ?",
-      whereArgs: [id, day],
+      where: "name = ? and day = ?",
+      whereArgs: [name, day],
     );
   }
 
-  Future<List<Map<String, Object?>>> getOpenDayEntries(String id) async {
+  Future<List<Map<String, Object?>>> getOpenDayEntries(String name) async {
     final db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
-        await db.query("opendays", where: "id = ?", whereArgs: [id]);
+        await db.query("opendays", where: "name = ?", whereArgs: [name]);
     return queryResult;
   }
 
-  Future<List<Map<String, Object?>>> getOpenededEntries(String id) async {
+  Future<List<Map<String, Object?>>> getOpenededEntries(String name) async {
     final db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db
-        .query("opendays", where: "id = ? and open = ?", whereArgs: [id, 1]);
+    final List<Map<String, Object?>> queryResult = await db.query("opendays",
+        where: "name = ? and open = ?", whereArgs: [name, 1]);
     return queryResult;
   }
 

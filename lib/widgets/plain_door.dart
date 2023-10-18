@@ -62,7 +62,7 @@ class _PlainDoorState extends State<PlainDoor>
 
   updateDBEntry() async {
     DatabaseHandler db = DatabaseHandler();
-    db.updateOpened(id: widget.calendar?.id ?? "", day: widget.iterator);
+    db.updateOpened(name: widget.calendar?.name ?? "", day: widget.iterator);
   }
 
   bool checkIfDoorIsOpenable() {

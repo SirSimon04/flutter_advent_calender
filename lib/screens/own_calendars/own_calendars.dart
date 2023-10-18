@@ -9,7 +9,6 @@ import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:provider/provider.dart';
 
 class OwnCalendars extends StatefulWidget {
   const OwnCalendars({Key? key}) : super(key: key);
@@ -21,7 +20,8 @@ class OwnCalendars extends StatefulWidget {
 class _OwnCalendarsState extends State<OwnCalendars>
     with AutomaticKeepAliveClientMixin {
   String ngrokUrl = "http://6c9b-84-191-202-87.ngrok.io";
-  final TextEditingController _textFieldController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordContrller = TextEditingController();
   final DatabaseHandler db = DatabaseHandler();
 
   bool _isLoading = false;
@@ -38,9 +38,14 @@ class _OwnCalendarsState extends State<OwnCalendars>
       setState(() {
         _isLoading = true;
       });
+
+      String calendarName = _nameController.text.trim();
+      String password = _passwordContrller.text.trim();
       //Get calendar by id from Server and save to local db
-      CalendarModel c = await httpHelper
-          .getCalendarFromServer(_textFieldController.text.trim());
+      CalendarModel c = await httpHelper.getCalendarFromServer(
+        name: calendarName,
+        password: password,
+      );
       await databaseHandler.insertCalendar(c);
       //Update showing calendars
       setState(() {
@@ -49,22 +54,31 @@ class _OwnCalendarsState extends State<OwnCalendars>
 
       //Saving every image on local storage
       for (int i = 0; i < 24; i++) {
-        await fileService.saveImageFromName(c.id + "_" + i.toString() + ".jpg");
+        await fileService.loadImageFromServerAndSave(
+          name: calendarName,
+          password: password,
+          number: i,
+        );
       }
 
       //Datenbankeinträge hinzufügen, ob eine Tür schon geöffnet ist
       for (int i = 0; i < 24; i++) {
-        await databaseHandler.insertOpened(id: c.id, day: i);
+        await databaseHandler.insertOpened(name: c.name, day: i);
       }
       setState(() {
         _isLoading = false;
       });
-    } on NotFoundException catch (e) {
+    } on PasswordWrongException {
+      setState(() {
+        _isLoading = false;
+      });
+      ToastService.showLongToast("Das eingegeben Passwort ist falsch");
+    } on NotFoundException {
       setState(() {
         _isLoading = false;
       });
       ToastService.showLongToast(
-          "Der Kalender mit der eingegeben Id wurde nicht gefunden");
+          "Der Kalender mit dem eingegebenen Namen wurde nicht gefunden");
     } on DatabaseException catch (e) {
       setState(() {
         _isLoading = false;
@@ -72,6 +86,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
       if (e.isUniqueConstraintError()) {
         ToastService.showLongToast("Diser Kalender wurde schon hinzugefügt");
       } else {
+        print(e.toString());
         ToastService.showLongToast(
             "Beim Laden des Kalenders ist ein Fehler aufgetreten");
       }
@@ -83,7 +98,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
       ToastService.showLongToast(
           "Beim Laden des Kalenders ist ein Fehler aufgetreten");
     }
-    _textFieldController.text = "";
+    _nameController.text = "";
   }
 
   showAddAlert(context) {
@@ -94,11 +109,24 @@ class _OwnCalendarsState extends State<OwnCalendars>
               title: const Text('Kalendar hinzufügen'),
               content: Padding(
                 padding: const EdgeInsets.only(top: 18),
-                child: CupertinoTextField(
-                  controller: _textFieldController,
-                  placeholder: "Kalender Code",
-                  style: const TextStyle(color: Colors.white),
-                  autofocus: true,
+                child: Column(
+                  children: [
+                    CupertinoTextField(
+                      controller: _nameController,
+                      placeholder: "Name",
+                      style: const TextStyle(color: Colors.white),
+                      autofocus: true,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    CupertinoTextField(
+                      controller: _passwordContrller,
+                      placeholder: "Passwort",
+                      style: const TextStyle(color: Colors.white),
+                      autofocus: true,
+                    ),
+                  ],
                 ),
               ),
               actions: [
@@ -119,7 +147,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
               title: const Text('Kalender hinzufügen'),
               content: TextField(
                 onChanged: (value) {},
-                controller: _textFieldController,
+                controller: _nameController,
                 decoration: const InputDecoration(hintText: "Kalender-Code"),
               ),
               actions: [
@@ -146,16 +174,23 @@ class _OwnCalendarsState extends State<OwnCalendars>
     _futureCalList = getCalList();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _passwordContrller.dispose();
+  }
+
   Future<List<CalendarModel>> getCalList() async => await db.getCalendars();
 
-  Future<int> calculateDoorsToOpen(String id) async {
+  Future<int> calculateDoorsToOpen(String name) async {
     DateTime now = DateTime.now();
     if (now.isBefore(DateTime.utc(2022, 12))) {
       return -1;
     } else if (now.isAfter(DateTime.utc(2022, 12, 24))) {
       return -2;
     } else {
-      List openedDoors = await databaseHandler.getOpenededEntries(id);
+      List openedDoors = await databaseHandler.getOpenededEntries(name);
       return now.day - openedDoors.length;
     }
   }
@@ -236,7 +271,7 @@ class _OwnCalendarsState extends State<OwnCalendars>
                           itemBuilder: (context, index) {
                             return FutureBuilder<int>(
                                 future: calculateDoorsToOpen(
-                                    snapshot.data![index].id),
+                                    snapshot.data![index].name),
                                 builder: (context2, snapshot2) {
                                   if (snapshot.hasData) {
                                     return CalendarTile(

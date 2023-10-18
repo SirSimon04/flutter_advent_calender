@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advent_calender/services/http.dart';
 import 'package:flutter_advent_calender/services/toast_service.dart';
 import 'package:flutter_advent_calender/styles.dart';
 import 'package:flutter_advent_calender/widgets/loader.dart';
@@ -8,6 +7,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:clipboard/clipboard.dart';
+
+import '../../models/calendar_model.dart';
+import '../../services/http.dart';
 
 class CreateCalendar extends StatefulWidget {
   const CreateCalendar({Key? key}) : super(key: key);
@@ -20,6 +22,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     with AutomaticKeepAliveClientMixin {
   late TextEditingController _titleController;
   late TextEditingController _msgController;
+  late TextEditingController _nameController;
+  late TextEditingController _passwordController;
   late ScrollController _scrollController;
   late String newCalId;
 
@@ -35,6 +39,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     _titleController = TextEditingController();
     _msgController = TextEditingController();
     _scrollController = ScrollController();
+    _nameController = TextEditingController();
+    _passwordController = TextEditingController();
   }
 
   @override
@@ -43,6 +49,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     _titleController.dispose();
     _msgController.dispose();
     _scrollController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
   }
 
   @override
@@ -52,14 +60,6 @@ class _CreateCalendarState extends State<CreateCalendar>
       appBar: PlatformAppBar(
         title: const Text("Erstelle einen neuen Kalendar"),
       ),
-      // appBar: AppBar(
-      //   title: const Text(
-      //     "Erstelle einen neuen Kalender",
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -68,7 +68,24 @@ class _CreateCalendarState extends State<CreateCalendar>
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 12,
+                    height: 16,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Informationen",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text(
+                    "Setze hier den Titel und die Weihnachts-Nachricht. Der Titel wird in der App angezeigt und die Weihnachtsnachricht wird an Weihcnahten angezeigt.",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -85,18 +102,6 @@ class _CreateCalendarState extends State<CreateCalendar>
                             ),
                             controller: _titleController,
                           ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: const Divider(
-                      thickness: 4,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -122,6 +127,58 @@ class _CreateCalendarState extends State<CreateCalendar>
                     child: const Divider(
                       thickness: 4,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Kalenderzugriff",
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text(
+                    "Füge einen Namen und ein Passwort hinzu. Der Name darf nur aus Buchstaben bestehen. Beides kannst du anderen geben, um deinen Kalender herunterzuladen. Der Name ist nicht sichtbar und wird nur zum Hinzufügen benutzt. Nach erfolgreichem Hochladen kannst du Name und Passwort kopieren.",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        ? PlatformTextField(
+                            cupertino: (_, __) => cupertinoTextFieldStyle,
+                            hintText: "Name",
+                            controller: _nameController,
+                          )
+                        : TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Name',
+                            ),
+                            controller: _nameController,
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        ? PlatformTextField(
+                            cupertino: (_, __) => cupertinoTextFieldStyle,
+                            hintText: "Passwort",
+                            controller: _passwordController,
+                          )
+                        : TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Passwort',
+                            ),
+                            controller: _passwordController,
+                          ),
                   ),
                   const SizedBox(
                     height: 16,
@@ -425,30 +482,66 @@ class _CreateCalendarState extends State<CreateCalendar>
   ];
 
   onCreateButtonPressed(BuildContext context) async {
+    RegExp alphabetic = RegExp(r'^[A-Za-z]+$');
     if (_titleController.text.trim().isEmpty ||
         _msgController.text.trim().isEmpty ||
-        images.contains(null)) {
+        images.contains(null) ||
+        _nameController.text.isEmpty ||
+        _passwordController.text.trim().isEmpty) {
       ToastService.showLongToast(
           "Es sind nicht alle Textfelder ausgefüllt oder du hast noch nicht alle Fotos hochgeladen");
+    } else if (_nameController.text.contains(" ")) {
+      ToastService.showLongToast(
+          "Der Name der Kalenders darf kein Leerzeichen enthalten.");
+    } else if (_passwordController.text.contains(" ")) {
+      ToastService.showLongToast(
+          "Das Passwort darf kein Leerzeichen enthalten.");
+    } else if (!alphabetic.hasMatch(_nameController.text)) {
+      ToastService.showLongToast("Der Name darf nur auf Buchstaben bestehen.");
     } else {
       setState(() {
         _isLoading = true;
       });
       HttpHelper http = HttpHelper();
-      newCalId = await http.uploadCalendar(
+      CalendarModel newCalendar = CalendarModel(
         msg: _msgController.text.trim(),
         title: _titleController.text.trim(),
         bgId: selectedBgIndex,
         doorId: selectedDoorIndex,
+        name: _nameController.text.trim(),
+        password: _passwordController.text.trim(),
       );
-      print("uploaded calendar successfully " + newCalId);
-      await http.uploadImages(
-        images: images,
-        newCalId: newCalId,
-      );
-      print("uploaded images");
+      try {
+        CalendarModel uploadedCalendar =
+            await http.uploadCalendar(newCalendar: newCalendar);
+        print("uploaded calendar successfully " + uploadedCalendar.toString());
+        await http.uploadImages(
+            images: images, calendarModel: uploadedCalendar);
+      } on NameAlreadyTakenException {
+        ToastService.showLongToast(
+            "Dieser Name ist bereits vergeben. Bitte wähle einen anderen Namen zur Identifizierung.");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      } on Exception catch (e) {
+        print(e.toString());
+        ToastService.showLongToast("Es ist ein Fehler aufgetreten.");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      String dialogString = "";
+      dialogString += "Name: " + _nameController.text + "\n";
+      dialogString += "Password: " + _passwordController.text;
+
       _msgController.clear();
       _titleController.clear();
+      _nameController.clear();
+      _passwordController.clear();
+
       List<File?> newImages = [];
       for (int i = 0; i < 24; i++) {
         newImages.add(null);
@@ -468,13 +561,13 @@ class _CreateCalendarState extends State<CreateCalendar>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Schicke diese Id an deine Freunde",
+                  "Schicke diese Daten an deine Freunde",
                   textAlign: TextAlign.center,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    newCalId,
+                    dialogString,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -482,13 +575,13 @@ class _CreateCalendarState extends State<CreateCalendar>
             ),
             actions: [
               CupertinoDialogAction(
-                child: const Text("ID kopieren"),
+                child: const Text("Daten kopieren"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  FlutterClipboard.copy(newCalId).then(
+                  FlutterClipboard.copy(dialogString).then(
                     (value) {
                       ToastService.showLongToast(
-                        "Id erfolgreich kopiert",
+                        "Daten erfolgreich kopiert",
                       );
                     },
                   );
@@ -506,13 +599,13 @@ class _CreateCalendarState extends State<CreateCalendar>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Schicke diese Id an deine Freunde",
+                  "Schicke diese Daten an deine Freunde",
                   textAlign: TextAlign.center,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    newCalId,
+                    dialogString,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -523,10 +616,10 @@ class _CreateCalendarState extends State<CreateCalendar>
                 child: const Text("ID kopieren"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  FlutterClipboard.copy(newCalId).then(
+                  FlutterClipboard.copy(dialogString).then(
                     (value) {
                       ToastService.showLongToast(
-                        "Id erfolgreich kopiert",
+                        "Daten erfolgreich kopiert",
                       );
                     },
                   );

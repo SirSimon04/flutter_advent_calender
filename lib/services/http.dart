@@ -2,20 +2,27 @@ import 'dart:io';
 import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 class NotFoundException implements Exception {}
 
+class PasswordWrongException implements Exception {}
+
+class NameAlreadyTakenException implements Exception {}
+
 class HttpHelper {
   HttpHelper();
-  static String serverBaseUrl = "http://192.168.178.26:3000";
+  static String serverBaseUrl = "http://172.16.11.108:3000";
 
-  Future<CalendarModel> getCalendarFromServer(String id) async {
-    final response =
-        await http.get(Uri.parse(serverBaseUrl + "/calendar/" + id));
-    print(Uri.parse(serverBaseUrl + "/calendar/" + id));
+  Future<CalendarModel> getCalendarFromServer({
+    required String name,
+    required String password,
+  }) async {
+    final response = await http.get(
+        Uri.parse(serverBaseUrl + "/calendar?name=$name&password=$password"));
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
+    } else if (response.statusCode == 403) {
+      throw PasswordWrongException();
     } else if (response.statusCode == 404) {
       throw NotFoundException();
     } else {
@@ -23,67 +30,54 @@ class HttpHelper {
     }
   }
 
-  Future<String> uploadCalendar({
-    required String title,
-    required String msg,
-    required int bgId,
-    required int doorId,
+  Future<CalendarModel> uploadCalendar({
+    required CalendarModel newCalendar,
   }) async {
-    String newCalId =
-        sha256.convert(utf8.encode(DateTime.now().toString())).toString();
-
-    var res = await http.post(
+    http.Response res = await http.post(
       Uri.parse('$serverBaseUrl/calendar'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, dynamic>{
-        'id': newCalId,
-        "title": title,
-        "christmasMessage": msg,
-        "from": "VON DICH",
-        "to": "FÜR MICH",
-        "bgId": bgId,
-        "doorId": doorId
-      }),
+      body: jsonEncode(newCalendar.toMap()),
     );
-    print(res.body);
-    print(jsonEncode(<String, dynamic>{
-      'id': newCalId,
-      "title": title,
-      "msg": msg,
-      "from": "VON DICH",
-      "to": "FÜR MICH",
-      "bgId": bgId,
-      "doorId": doorId
-    }));
+    if (res.statusCode == 409) {
+      throw NameAlreadyTakenException();
+    }
+    if (res.statusCode != 201) throw Exception();
+    //rest of try catch is one level higher
 
-    return newCalId;
+    CalendarModel uploadedCalendar =
+        CalendarModel.fromMap(jsonDecode(res.body));
+
+    return uploadedCalendar;
   }
 
   Future<void> uploadImages(
-      {required List<File?> images, required String newCalId}) async {
+      {required List<File?> images,
+      required CalendarModel calendarModel}) async {
     print("hey");
-    final request =
-        http.MultipartRequest("POST", Uri.parse("$serverBaseUrl/image"));
+    final request = http.MultipartRequest(
+      "POST",
+      Uri.parse(
+          "$serverBaseUrl/image?password=${calendarModel.password}&name=${calendarModel.name}"),
+    );
 
     final headers = {"Content-type": "multipart/form-data"};
-
     for (int i = 0; i < 24; i++) {
       request.files.add(
         http.MultipartFile(
           i.toString(),
           images[i]!.readAsBytes().asStream(),
           images[i]!.lengthSync(),
-          filename: (newCalId + "_" + i.toString() + ".jpg"),
+          filename: (calendarModel.name + "_" + i.toString() + ".jpg"),
           // images[i]!.path.split(".").last),
         ),
       );
     }
 
     request.headers.addAll(headers);
-
     var res = await request.send();
-    print(res.statusCode);
+
+    if (res.statusCode != 201) throw Exception();
   }
 }

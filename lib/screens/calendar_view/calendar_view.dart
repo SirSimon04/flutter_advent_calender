@@ -6,9 +6,7 @@ import 'package:flutter_advent_calender/models/calendar_model.dart';
 import 'package:flutter_advent_calender/services/file_service.dart';
 import 'package:flutter_advent_calender/services/local_database_handler.dart';
 import 'package:flutter_advent_calender/widgets/calendar_door.dart';
-import 'package:flutter_advent_calender/widgets/calendar_tile.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:provider/provider.dart';
 
 class CalendarView extends StatefulWidget {
   final CalendarModel calendar;
@@ -27,15 +25,15 @@ class _CalendarViewState extends State<CalendarView> {
   late Future<List<Map<String, dynamic>>> _futureOpenList;
 
   Future<List<Map<String, dynamic>>> getOpenList() async =>
-      await db.getOpenDayEntries(widget.calendar.id);
+      await db.getOpenDayEntries(widget.calendar.name);
 
   Future<void> deleteCalendar() async {
     for (int i = 0; i < 24; i++) {
       await fileService.deleteImageFromName(
-          widget.calendar.id + "_" + i.toString() + ".jpg");
-      await db.deleteOpened(id: widget.calendar.id, day: i);
+          widget.calendar.name + "_" + i.toString() + ".jpg");
+      await db.deleteOpened(name: widget.calendar.name, day: i);
     }
-    await db.deleteCalendar(widget.calendar.id);
+    await db.deleteCalendar(widget.calendar.name);
   }
 
   void showDeleteDialog() {
@@ -128,7 +126,6 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    List<List<double>> posList = calculatePositions(context);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(widget.calendar.title),
