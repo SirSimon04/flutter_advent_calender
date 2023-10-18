@@ -141,7 +141,7 @@ class _CreateCalendarState extends State<CreateCalendar>
                     height: 24,
                   ),
                   const Text(
-                    "Füge einen Namen und ein Passwort hinzu. Beides kannst du anderen geben, um deinen Kalender herunterzuladen. Der Name ist nicht sichtbar und wird nur zum Hinzufügen benutzt. Nach erfolgreichem Hochladen kannst du Name und Passwort kopieren.",
+                    "Füge einen Namen und ein Passwort hinzu. Der Name darf nur aus Buchstaben bestehen. Beides kannst du anderen geben, um deinen Kalender herunterzuladen. Der Name ist nicht sichtbar und wird nur zum Hinzufügen benutzt. Nach erfolgreichem Hochladen kannst du Name und Passwort kopieren.",
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -482,6 +482,7 @@ class _CreateCalendarState extends State<CreateCalendar>
   ];
 
   onCreateButtonPressed(BuildContext context) async {
+    RegExp alphabetic = RegExp(r'^[A-Za-z]+$');
     if (_titleController.text.trim().isEmpty ||
         _msgController.text.trim().isEmpty ||
         images.contains(null) ||
@@ -495,6 +496,8 @@ class _CreateCalendarState extends State<CreateCalendar>
     } else if (_passwordController.text.contains(" ")) {
       ToastService.showLongToast(
           "Das Passwort darf kein Leerzeichen enthalten.");
+    } else if (!alphabetic.hasMatch(_nameController.text)) {
+      ToastService.showLongToast("Der Name darf nur auf Buchstaben bestehen.");
     } else {
       setState(() {
         _isLoading = true;

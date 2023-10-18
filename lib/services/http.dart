@@ -11,7 +11,7 @@ class NameAlreadyTakenException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  static String serverBaseUrl = "http://192.168.178.26:3000";
+  static String serverBaseUrl = "http://172.16.11.108:3000";
 
   Future<CalendarModel> getCalendarFromServer({
     required String name,
@@ -19,8 +19,6 @@ class HttpHelper {
   }) async {
     final response = await http.get(
         Uri.parse(serverBaseUrl + "/calendar?name=$name&password=$password"));
-    print(serverBaseUrl + "/calendar?name=$name&password=$password");
-    print(response.statusCode);
     if (response.statusCode == 200) {
       return CalendarModel.fromMap(jsonDecode(response.body));
     } else if (response.statusCode == 403) {
@@ -45,13 +43,11 @@ class HttpHelper {
     if (res.statusCode == 409) {
       throw NameAlreadyTakenException();
     }
-    print(res.body);
-
-    //try catch please
+    if (res.statusCode != 201) throw Exception();
+    //rest of try catch is one level higher
 
     CalendarModel uploadedCalendar =
         CalendarModel.fromMap(jsonDecode(res.body));
-    print(uploadedCalendar);
 
     return uploadedCalendar;
   }
@@ -80,8 +76,8 @@ class HttpHelper {
     }
 
     request.headers.addAll(headers);
-
     var res = await request.send();
-    print(res.statusCode);
+
+    if (res.statusCode != 201) throw Exception();
   }
 }
