@@ -86,12 +86,10 @@ class _OwnCalendarsState extends State<OwnCalendars>
       if (e.isUniqueConstraintError()) {
         ToastService.showLongToast("Diser Kalender wurde schon hinzugefügt");
       } else {
-        print(e.toString());
         ToastService.showLongToast(
             "Beim Laden des Kalenders ist ein Fehler aufgetreten");
       }
     } catch (e) {
-      print(e);
       setState(() {
         _isLoading = false;
       });

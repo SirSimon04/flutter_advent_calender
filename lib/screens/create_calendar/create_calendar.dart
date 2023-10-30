@@ -223,12 +223,11 @@ class _CreateCalendarState extends State<CreateCalendar>
                           // );
                           if (pickedFile != null) {
                             setState(() {
-                              // images[index] = File(pickedFile.path);
-                              for (int i = 0; i < 24; i++) {
-                                images[i] = File(pickedFile.path);
-                              }
+                              images[index] = File(pickedFile.path);
+                              // for (int i = 0; i < 24; i++) {
+                              //   images[i] = File(pickedFile.path);
+                              // }
                             });
-                            print(images);
                           }
                         },
                         child: Container(
@@ -514,7 +513,6 @@ class _CreateCalendarState extends State<CreateCalendar>
       try {
         CalendarModel uploadedCalendar =
             await http.uploadCalendar(newCalendar: newCalendar);
-        print("uploaded calendar successfully " + uploadedCalendar.toString());
         await http.uploadImages(
             images: images, calendarModel: uploadedCalendar);
       } on NameAlreadyTakenException {
@@ -524,8 +522,7 @@ class _CreateCalendarState extends State<CreateCalendar>
           _isLoading = false;
         });
         return;
-      } on Exception catch (e) {
-        print(e.toString());
+      } on Exception {
         ToastService.showLongToast("Es ist ein Fehler aufgetreten.");
         setState(() {
           _isLoading = false;

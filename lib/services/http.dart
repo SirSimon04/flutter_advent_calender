@@ -57,7 +57,6 @@ class HttpHelper {
   Future<void> uploadImages(
       {required List<File?> images,
       required CalendarModel calendarModel}) async {
-    print("hey");
     final request = http.MultipartRequest(
       "POST",
       Uri.parse(

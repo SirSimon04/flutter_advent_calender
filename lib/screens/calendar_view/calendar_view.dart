@@ -94,7 +94,6 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   List<List<double>> calculatePositions(BuildContext context) {
-    print("calculatePos called");
     List<double> bottomList = [];
     List<double> rightList = [];
 
