@@ -80,17 +80,19 @@ class _CalendarDoorState extends State<CalendarDoor> {
                       child: SizedBox(
                         height: widget.doorSize.height - 5,
                         width: widget.doorSize.width - 2,
-                        child: Image.file(
-                          File(
-                              "${snapshot.data!.path}/${widget.calendar.name}_${widget.iterator}.jpg"),
-                          width: 8,
-                          height: 8,
-                          // alignment: Alignment.center,
-                          // fit: BoxFit.cover,
+                        child: widget.isDoorOpen || isDoorOpenChange
+                            ? Image.file(
+                                File(
+                                    "${snapshot.data!.path}/${widget.calendar.name}_${widget.iterator}.jpg"),
+                                width: 8,
+                                height: 8,
+                                // alignment: Alignment.center,
+                                // fit: BoxFit.cover,
 
-                          // width: widget.doorSize.width,
-                          // height: widget.doorSize.height,
-                        ),
+                                // width: widget.doorSize.width,
+                                // height: widget.doorSize.height,
+                              )
+                            : Container(),
                       ),
                     );
                   } catch (e) {
