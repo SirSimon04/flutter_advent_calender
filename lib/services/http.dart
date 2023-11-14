@@ -11,7 +11,7 @@ class NameAlreadyTakenException implements Exception {}
 
 class HttpHelper {
   HttpHelper();
-  static String serverBaseUrl = "https://advent4you-backend.onrender.com";
+  static String serverBaseUrl = "https://advent4you-nest.you2me.app";
 
   Future<CalendarModel> getCalendarFromServer({
     required String name,
