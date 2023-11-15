@@ -144,10 +144,24 @@ class _OwnCalendarsState extends State<OwnCalendars>
             context: context,
             builder: (context) => AlertDialog(
               title: const Text('Kalender hinzufügen'),
-              content: TextField(
-                onChanged: (value) {},
-                controller: _nameController,
-                decoration: const InputDecoration(hintText: "Kalender-Code"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    onChanged: (value) {},
+                    controller: _nameController,
+                    decoration:
+                        const InputDecoration(hintText: "Kalender-Code"),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  TextField(
+                    onChanged: (value) {},
+                    controller: _passwordContrller,
+                    decoration: const InputDecoration(hintText: "Passwort"),
+                  ),
+                ],
               ),
               actions: [
                 TextButton(
